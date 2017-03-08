@@ -7,13 +7,13 @@ location and the remote location.  So, potentially Amazon S3 could be used.
 
 ## Screen Shots
 
-[Imgur](http://i.imgur.com/kF1GrPp.png)
+![Imgur](http://i.imgur.com/kF1GrPp.png)
 There is a new update
 
-[Imgur](http://i.imgur.com/bcCyLJc.png)
+![Imgur](http://i.imgur.com/bcCyLJc.png)
 The code is currently up to date
 
-[Imgur](http://i.imgur.com/BbKhpls.png)
+![Imgur](http://i.imgur.com/BbKhpls.png)
 The update has finished
 
 ## Setup the update script
