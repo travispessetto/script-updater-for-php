@@ -5,6 +5,17 @@ the files via a couple clicks.  The script only requires that it can get at a
 update file that contains the current version as well as the local filesystem
 location and the remote location.  So, potentially Amazon S3 could be used.
 
+## Screen Shots
+
+[Imgur](http://i.imgur.com/kF1GrPp.png)
+There is a new update
+
+[Imgur](http://i.imgur.com/bcCyLJc.png)
+The code is currently up to date
+
+[Imgur](http://i.imgur.com/BbKhpls.png)
+The update has finished
+
 ## Setup the update script
 
 To set this up on the first line put the version number.  Currently it will
