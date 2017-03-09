@@ -8,24 +8,32 @@ location and the remote location.  So, potentially Amazon S3 could be used.
 ## Screen Shots
 
 ![Imgur](http://i.imgur.com/kF1GrPp.png)
+
 There is a new update
 
 ![Imgur](http://i.imgur.com/bcCyLJc.png)
+
 The code is currently up to date
 
 ![Imgur](http://i.imgur.com/BbKhpls.png)
+
 The update has finished
 
-## Setup the update script
+## Setup the Update Script
 
-To set this up on the first line put the version number.  Currently it will
-update if there is not a match but we suggest the version format of 0.0.0 as
-it may verify these numbers are greater than the previous version later.
+To set this up on the first line put the version number.  To specify the version
+number you put a series of integers seperated by periods.  The numbers are more
+significant going from right to left with the leftmost integer being the most
+significant.  An example version is 1.0.0.  1.0.0.1 would trigger an update on
+1.0.0 and 2.0 would trigger an update on 1.0.0.1.
 
 After you put the version on line 1 you can put each file that needs to be
 replaced on the subsequent lines.  Start by typing where the file will be
 on the local filesytem (the one being updated) and where to get it it on
 the remote file system seperated by exactly 4 spaces between them.
+
+Currently there is no delete or script running capabilities.  We hope to add
+these in the future.
 
 The following is an example that will place the remote file files/foobar.txt
 into foobar.txt:
@@ -35,18 +43,28 @@ into foobar.txt:
 foobar.txt    files/foobar.txt
 ```
 
-## Setup the script
+## Setup the Script
 
 To set up the script you must edit config.php.  version_url is where you put the
 base url for your update files.  version_file is the version file on the remote
 host with the information to update.  update_folder is the folder on the local
 host that you want to serve as your base.
 
-## Changing the url for different versions
+## Changing the URL for Different Versions
 
 If you would like to have each version have its own update script you can make
 sure you include the updaters config.php in the updates with the new location
 for that version.
+
+## Current Failsafes
+
+There is currently only one failsafe for the update.  That is it checks for
+file writability before it trys to install the files.  This is to prevent an
+update from being only partially completed and, as a result, having your scripts
+not work right.
+
+In the future we hope to implement a rollback system that can undo the changes
+if the update fails when installing files.
 
 ## License
 

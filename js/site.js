@@ -14,15 +14,33 @@ var checkVersion = function()
 		  current = data.current;
 			if(current)
 			{
-				$("#info").append("<div>Version is up to date at version "+data.version+'</div>');
+				$("#info").append("<div>Version is up to date at version "+data.current_version+'</div>');
 			}
 			else
 			{
-				$("#info").append('<div>Version is out of date</div><div>Latest version is ' + data.version +'</div>');
+				$("#info").append('<div>Version is out of date at version '+data.current_version+'</div><div>Latest version is ' + data.update_version +'</div>');
 				$("#info").append('<div><a href="#" class="primary" onclick="executeSteps(2);">Update Now</a></div>')
 			}
 	},
 	failed);
+}
+
+var checkWritablilty = function()
+{
+	$("#info").append('<div>Checking files are writable <span class="waiting"></span>');
+	$.get("controller","action=CheckFilesAreWritable").then(function(data)
+	{
+		 if(data.writable)
+		 {
+			 $("#info").append('<div>Files are writable</div>');
+			 executeSteps(3);
+		 }
+		 else
+		 {
+		   $("#info").append('<div>Files are not writable. Update failed.');
+		 }
+		 clearWaiting();
+	},failed);
 }
 
 var clearLinks = function()
@@ -45,13 +63,16 @@ var executeSteps = function(step)
 			checkVersion();
 			break;
 		case 2:
-			clearLinks();
+			 clearLinks();
+			 checkWritablilty();
+			 break;
+		case 3:
 			installFiles();
 			break;
-	 case 3:
+	 case 4:
 			updateVersion();
 			break;
-		case 4:
+		case 5:
 			finished();
 			break;
 	}
@@ -75,7 +96,7 @@ var installFiles = function()
 	$.get("controller","action=InstallFiles").then(function(data){
 			clearWaiting();
 			$("#info").append('<div>Files installed</div>');
-			executeSteps(3);
+			executeSteps(4);
 	},failed);
 }
 
@@ -84,8 +105,8 @@ var updateVersion = function()
 	$("#info").append('<div>Updating the version file <span class="waiting"></span></div>');
 	$.get("controller","action=UpdateVersion").then(function(data){
 			clearWaiting();
-			$("#info").append('<div>Version files updated</div>');
-			executeSteps(4);
+			$("#info").append('<div>Version file updated</div>');
+			executeSteps(5);
 	},failed);
 }
 
