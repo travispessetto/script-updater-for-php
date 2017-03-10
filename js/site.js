@@ -14,12 +14,12 @@ var checkVersion = function()
 		  current = data.current;
 			if(current)
 			{
-				$("#info").append("<div>Version is up to date at version "+data.current_version+'</div>');
+				$("#info").append(sprintf('<div>'+message['version_up_to_date']+'</div>',data.current_version));
 			}
 			else
 			{
-				$("#info").append('<div>Version is out of date at version '+data.current_version+'</div><div>Latest version is ' + data.update_version +'</div>');
-				$("#info").append('<div><a href="#" class="primary" onclick="executeSteps(2);">Update Now</a></div>')
+				$("#info").append(sprintf('<div>'+message['version_out_of_date']+'</div>',data.current_version, data.update_version));
+				$("#info").append(sprintf('<div><a href="#" class="primary" onclick="executeSteps(2);">{0}</a></div>',message['update_btn']));
 			}
 	},
 	failed);
@@ -27,17 +27,17 @@ var checkVersion = function()
 
 var checkWritablilty = function()
 {
-	$("#info").append('<div>Checking files are writable <span class="waiting"></span>');
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['check_files_are_writable']));
 	$.get("controller","action=CheckFilesAreWritable").then(function(data)
 	{
 		 if(data.writable)
 		 {
-			 $("#info").append('<div>Files are writable</div>');
+			 $("#info").append(sprintf('<div>{0}</div>',message['files_are_writable']));
 			 executeSteps(3);
 		 }
 		 else
 		 {
-		   $("#info").append('<div>Files are not writable. Update failed.');
+		   $("#info").append(sprintf('<div>{0}</div>',message['files_are_not_writable']));
 		 }
 		 clearWaiting();
 	},failed);
@@ -81,31 +81,41 @@ var executeSteps = function(step)
 var failed = function(xhr,status,error)
 {
 	clearWaiting();
-	$("#info").append('<div>The update failed</div>')
+	$("#info").append(sprintf('<div>{0}</div>',message['update_failed']));
 	$("#info").append(status);
 }
 
 var finished = function()
 {
-	$("#info").append('<div>Update finished</div>');
+	$("#info").append(sprintf('<div>{0}</div>',message['update_finished']));
 }
 
 var installFiles = function()
 {
-	$("#info").append('<div>Downloading and installing files <span class="waiting"></span></div>');
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['installing_files']));
 	$.get("controller","action=InstallFiles").then(function(data){
 			clearWaiting();
-			$("#info").append('<div>Files installed</div>');
+			$("#info").append(sprintf('<div>{0}</div>',message['files_installed']));
 			executeSteps(4);
 	},failed);
 }
 
+var sprintf = function()
+{
+	 var message = arguments[0];
+	 for(var i = 1; i < arguments.length; ++i)
+	 {
+		 message = message.replace('{'+(i-1)+'}',arguments[i]);
+	 }
+	 return message;
+}
+
 var updateVersion = function()
 {
-	$("#info").append('<div>Updating the version file <span class="waiting"></span></div>');
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['updating_version']));
 	$.get("controller","action=UpdateVersion").then(function(data){
 			clearWaiting();
-			$("#info").append('<div>Version file updated</div>');
+			$("#info").append(sprintf('<div>{0}</div>',message['version_file_updated']));
 			executeSteps(5);
 	},failed);
 }

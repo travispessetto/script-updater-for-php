@@ -1,17 +1,21 @@
+<?php
+require_once("./langs/language.php");
+?>
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Script Updater</title>
+  <title><?php echo Language::Instance()->title; ?></title>
   <link href="css/site.css" rel="stylesheet" />
   <script src="js/jquery-3.1.1.min.js"></script>
+  <script src="<?php echo "js/langs/".Language::Instance()->LanguageCode().".js"; ?>"></script>
   <script src="js/site.js"></script>
 </head>
 <body>
 <div class="header">
-  <h1>Update</h1>
+  <h1><?php echo Language::Instance()->title; ?></h1>
 </div>
 <div id="info">
-  <div>Checking Version <span class="waiting"></span></div>
+  <div><?php echo Language::Instance()->check_version; ?> <span class="waiting"></span></div>
 </div>
 </body>
 </html>

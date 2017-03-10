@@ -1,9 +1,15 @@
-# PHP Updater
+# Updater for PHP
 
-PHP Updater is an update script that can be used with any PHP project to update
+Updater for PHP is an update script that can be used with any PHP project to update
 the files via a couple clicks.  The script only requires that it can get at a
 update file that contains the current version as well as the local filesystem
 location and the remote location.  So, potentially Amazon S3 could be used.
+
+Did we mention that this update script can adapt to languages?  All you need is
+the appropriate language files in js/langs and langs/php.  There are currently
+two languages supported out of the box, English and Spanish.  The script will
+default to English if it cannot find a suitable language file based on the
+brower's settings.
 
 ## Screen Shots
 
