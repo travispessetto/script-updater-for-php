@@ -1,4 +1,5 @@
 var message = [];
+message['check_version_file_exists'] = 'Checking version file exists';
 message['version_up_to_date'] = "Version is up to date at {0}";
 message['version_out_of_date'] = "Version is out of date at version {0}</div><div>Latest version is {1}";
 message['update_btn'] = "Update now";
@@ -9,5 +10,7 @@ message['update_failed'] = "The update failed";
 message['update_finished'] = "The update is finished";
 message['installing_files'] = "Downloading and installing files";
 message['files_installed'] = "Files installed";
+message['update_file_does_not_exist'] = 'Update file ({0}) not found';
+message['update_file_exists'] = 'Update file exists';
 message['updating_version'] = 'Updating the version file';
 message['version_file_updated'] = 'Version file updated';

@@ -7,7 +7,7 @@ require_once("./langs/language.php");
   <title><?php echo Language::Instance()->title; ?></title>
   <link href="css/site.css" rel="stylesheet" />
   <script src="js/jquery-3.1.1.min.js"></script>
-  <script src="<?php echo "js/langs/".Language::Instance()->LanguageCode().".js"; ?>"></script>
+  <script src="<?php echo "langs/js/".Language::Instance()->LanguageCode().".js"; ?>"></script>
   <script src="js/site.js"></script>
 </head>
 <body>

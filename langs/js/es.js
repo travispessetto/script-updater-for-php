@@ -1,4 +1,5 @@
 var message = [];
+message['check_version_file_exists'] = 'Comprobando que el archivo de actualización existe';
 message['version_up_to_date'] = 'La versión ya está actualizada a {0}';
 message['version_out_of_date'] = 'La versión {0} está desactualizada. La última versión es {1}';
 message['update_btn'] = "Actualizar Ya";
@@ -9,5 +10,7 @@ message['update_failed'] = 'La actualización se falló';
 message['update_finished'] = 'La actualización terminó';
 message['installing_files'] = 'Descargando y instalando los archivos';
 message['files_installed'] = 'Los archivos se instalaron';
+message['update_file_does_not_exist'] = 'El archivo de actualización ({0}) no se encontró';
+message['update_file_exists'] = 'El archivo de actualización existe';
 message['updating_version'] = 'Actualizando el archivo de versión';
 message['version_file_updated'] = 'Se actualizó el archivo de versión';
