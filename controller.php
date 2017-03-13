@@ -13,11 +13,11 @@ class Controller
    {
       $config = ConfigSingleton::Instance();
       $updateFolder = realPath($config->update_folder);
-      $sysc = Spyc::YAMLLoad($this->GetUpdateFile);
-      $writable = $this->CheckUpdateFilesWritable($sysc);
+      $spyc = Spyc::YAMLLoad($this->GetUpdateFile());
+      $writable = $this->CheckUpdateFilesWritable($spyc);
       if($writable)
       {
-        $writable = $this->CheckDeleteFilesWritable($sync);
+        $writable = $this->CheckDeleteFilesWritable($spyc);
       }
       echo json_encode(array("writable"=>$writable));
    }
@@ -38,21 +38,26 @@ class Controller
    public function InstallFiles()
    {
       $config = ConfigSingleton::Instance();
-      $versionUrl = $config->version_url.'/'.$config->version_file;
-      $updateFiles = Spyc::YAMLLoad($versionUrl);
+      $updateFiles = Spyc::YAMLLoad($this->GetUpdateFile());
+      $updateFiles = $updateFiles['files'];
+      $addFiles = $updateFiles['files']['add'];
       $updateFolder = realpath($config->update_folder).'/';
-      for($i = 0; $i < count($updateFiles['add']); $i++)
+      for($i = 0; $i < count($addFiles); $i++)
       {
-           $content = file_get_contents($config->version_url."/".$file[$i]['remote']);
-           $pathInfo = pathinfo($updateFolder.$file[$i]['local']);
+           $content = file_get_contents($config->version_url."/".$addFiles[$i]['remote']);
+           $pathInfo = pathinfo($updateFolder.$addFiles[$i]['local']);
            if(!file_exists($pathInfo['dirname']))
            {
              // true = recursive
              mkdir($pathInfo['dirname'],0755,true);
            }
-           file_put_contents($updateFolder.$file[$i]['local'],$content);
+           if(file_put_contents($updateFolder.$addFiles[$i]['local'],$content) === false)
+           {
+             header('HTTP/1.0 500 '.Language::Instance()->server_error);
+             exit();
+           }
       }
-      for($i = 0; $i < count($updateFolder.$updateFiles['delete']); $i++)
+      for($i = 0; $i < count($updateFiles['delete']); $i++)
       {
         if(is_dir($updateFolder.$updateFiles['delete'][$i]))
         {
@@ -70,8 +75,7 @@ class Controller
    public function UpdateVersion()
    {
      $config = ConfigSingleton::Instance();
-     $versionUrl = $config->version_url.'/'.$config->version_file;
-     $updateVersion = explode(PHP_EOL,$this->GetUpdateFile())[0];
+     $updateVersion = Spyc::YAMLLoad($this->GetUpdateFile())['version'];
      file_put_contents("version.txt",$updateVersion);
      echo json_encode(array());
    }
@@ -81,8 +85,8 @@ class Controller
       $config = ConfigSingleton::Instance();
       $versionUrl = $config->version_url.'/'.$config->version_file;
       $spyc = Spyc::YAMLLoad($this->GetUpdateFile());
-      $currentVersion = $spyc['version'];
-      $updateVersion = explode(PHP_EOL,$this->GetUpdateFile())[0];
+      $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
+      $updateVersion = $spyc['version'];
       $currentVersionNumbers = explode(".",$currentVersion);
       $updateVersionNumbers = explode(".",$updateVersion);
       $current = true;
@@ -159,9 +163,10 @@ class Controller
    private function CheckDeleteFilesWritable($delete)
    {
      $writable = true;
-     for($i = 0; $i < $update['delete']; $i++)
+     $deleteFiles = $upate['files']['delete'];
+     for($i = 0; $i < count($deleteFiles); $i++)
      {
-       $file = $update['delete'][$i];
+       $file = $deleteFiles[$i];
        $writable = $this->CheckFileIsWritable($file);
        if(!$writable)
        {
@@ -174,9 +179,10 @@ class Controller
    private function CheckUpdateFilesWritable($update)
    {
      $writable = true;
-     for($i = 0; $i < $update['add']; $i++)
+     $updateFiles = $update['files']['add'];
+     for($i = 0; $i < count($updateFiles); $i++)
      {
-         $file = $update['add'][$i]['local'];
+         $file = $updateFiles[$i]['local'];
          $writable = $this->CheckFileIsWritable($file);
          if(!$writable)
          {
