@@ -40,33 +40,39 @@ class Controller
       $config = ConfigSingleton::Instance();
       $updateFiles = Spyc::YAMLLoad($this->GetUpdateFile());
       $updateFiles = $updateFiles['files'];
-      $addFiles = $updateFiles['files']['add'];
       $updateFolder = realpath($config->update_folder).'/';
-      for($i = 0; $i < count($addFiles); $i++)
+      if(array_key_exists('add',$updateFiles))
       {
-           $content = file_get_contents($config->version_url."/".$addFiles[$i]['remote']);
-           $pathInfo = pathinfo($updateFolder.$addFiles[$i]['local']);
-           if(!file_exists($pathInfo['dirname']))
-           {
-             // true = recursive
-             mkdir($pathInfo['dirname'],0755,true);
-           }
-           if(file_put_contents($updateFolder.$addFiles[$i]['local'],$content) === false)
-           {
-             header('HTTP/1.0 500 '.Language::Instance()->server_error);
-             exit();
-           }
+          $addFiles = $updateFiles['add'];
+          for($i = 0; $i < count($addFiles); $i++)
+          {
+               $content = file_get_contents($config->version_url."/".$addFiles[$i]['remote']);
+               $pathInfo = pathinfo($updateFolder.$addFiles[$i]['local']);
+               if(!file_exists($pathInfo['dirname']))
+               {
+                 // true = recursive
+                 mkdir($pathInfo['dirname'],0755,true);
+               }
+               if(file_put_contents($updateFolder.$addFiles[$i]['local'],$content) === false)
+               {
+                 header('HTTP/1.0 500 '.Language::Instance()->server_error);
+                 exit();
+               }
+          }
       }
-      for($i = 0; $i < count($updateFiles['delete']); $i++)
+      if(array_key_exists('delete',$updateFiles))
       {
-        if(is_dir($updateFolder.$updateFiles['delete'][$i]))
-        {
-          rmdir($updateFolder.$updateFiles['delete'][$i]);
-        }
-        else
-        {
-          unlink($updateFolder.$updateFiles['delete'][$i]);
-        }
+          for($i = 0; $i < count($updateFiles['delete']); $i++)
+          {
+            if(is_dir($updateFolder.$updateFiles['delete'][$i]))
+            {
+              rmdir($updateFolder.$updateFiles['delete'][$i]);
+            }
+            else
+            {
+              unlink($updateFolder.$updateFiles['delete'][$i]);
+            }
+          }
       }
 
       echo json_encode(array());
@@ -109,6 +115,7 @@ class Controller
 
    private function CheckFileIsWritable($file)
    {
+     $updateFolder = ConfigSingleton::Instance()->update_folder;
      $writable = true;
      $pathInfo = pathinfo($updateFolder.'/'.$file);
      if(file_exists($updateFolder.'/'.$file) && !is_writable($updateFolder.'/'.$file) )
@@ -163,7 +170,12 @@ class Controller
    private function CheckDeleteFilesWritable($delete)
    {
      $writable = true;
-     $deleteFiles = $upate['files']['delete'];
+     // If there are no delete files we do not have to check for writability
+     if(!array_key_exists('delete',$delete['files']))
+     {
+       return true;
+     }
+     $deleteFiles = $delete['files']['delete'];
      for($i = 0; $i < count($deleteFiles); $i++)
      {
        $file = $deleteFiles[$i];

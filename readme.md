@@ -27,31 +27,31 @@ The update has finished
 
 ## Setup the Update Script
 
-To set this up on the first line put the version number.  To specify the version
-number you put a series of integers seperated by periods.  The numbers are more
-significant going from right to left with the leftmost integer being the most
-significant.  An example version is 1.0.0.  1.0.0.1 would trigger an update on
-1.0.0 and 2.0 would trigger an update on 1.0.0.1.
+To use this update script you will need to define a YAML file that explains
+what to do for the update.  This file must contain `version` and `files`.
+Under `files` there is two additional items, `add` and `delete`.  The version
+must be a set of integers seperated by a period (.) the leftmost number is of
+greatest importance.
 
-After you put the version on line 1 you can put each file that needs to be
-replaced on the subsequent lines.  Start by typing where the file will be
-on the local filesytem (the one being updated) and where to get it it on
-the remote file system seperated by exactly 4 spaces between them.
+Both the `add` and `delete` items are sequences.  With all items in the `add`
+sequence being a mapping with `local` and `remote` defined.  `local` is where
+you want the downloaded file to go and `remote` is where to get it from the
+update server.
 
-Currently there is no delete or script running capabilities.  We hope to add
-these in the future.
-
-The following is an example that will place the remote file files/foobar.txt
-into foobar.txt:
+Below is an example of a YAML update file:
 
 ```
-1.0.3
-foobar.txt    files/foobar.txt
+version:    1.0.17
+files:
+        add:
+            - {local: "foo/bar/writable/foobar.txt", remote: "files/foobar.txt"}
+        delete:
+            - "foo/foo.txt"
 ```
 
-## Setup the Script
+## Setup the Updater
 
-To set up the script you must edit config.php.  version_url is where you put the
+To set up the updater you must edit config.php.  version_url is where you put the
 base url for your update files.  version_file is the version file on the remote
 host with the information to update.  update_folder is the folder on the local
 host that you want to serve as your base.
@@ -71,6 +71,11 @@ not work right.
 
 In the future we hope to implement a rollback system that can undo the changes
 if the update fails when installing files.
+
+## Notice of Spyc
+
+In order to parse YAML we are using the [Spyc](https://github.com/mustangostang/spyc)
+library by Vladimir Andersen.  This is licensed under the [MIT License](https://github.com/mustangostang/spyc/blob/master/COPYING).
 
 ## License
 
