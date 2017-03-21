@@ -22,6 +22,30 @@ class Controller
       echo json_encode(array("writable"=>$writable));
    }
 
+   public function CheckForScripts()
+   {
+     $spyc = Spyc::YAMLLoad($this->GetUpdateFile());
+     $config = ConfigSingleton::Instance();
+     $updateFolder = realPath($config->update_folder);
+     $exists = true;
+     if(!array_key_exists('scripts',$spyc))
+     {
+       $exists = false;
+     }
+     else
+     {
+       foreach($spyc['scripts'] as $script)
+       {
+         if(!file_exists($updateFolder.'/'.$script['file']))
+         {
+           $exists = false;
+           break;
+         }
+       }
+     }
+     echo json_encode(array('exists'=>$exists));
+   }
+
    public function CheckUpdateFileExists()
    {
      $config = ConfigSingleton::Instance();

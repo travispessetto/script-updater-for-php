@@ -1,12 +1,33 @@
 $(document).ready(function()
 {
 		setInterval(waiting,1000);
-		executeSteps(0);
+		executeSteps(StepCounter.step);
 });
 
 var advanceStep = function(step)
 {
 	return ++step;
+}
+
+var checkForScripts = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['check_for_scripts']));
+	$.get("controller.php","action=CheckForScripts").then(function(data)
+	{
+		clearWaiting();
+		if(data.exists)
+		{
+			  $("#info").append(sprintf('<div>{0}</div>',message['scripts_exists']));
+				StepCounter.incrementStep(1);
+				executeSteps(StepCounter.step);
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['no_scripts_exists']));
+			StepCounter.incrementStep(2);
+			 executeSteps(StepCounter.step);
+		}
+	}, failed);
 }
 
 var checkVersion = function()
@@ -23,7 +44,8 @@ var checkVersion = function()
 			else
 			{
 				$("#info").append(sprintf('<div>'+message['version_out_of_date']+'</div>',data.current_version, data.update_version));
-				$("#info").append(sprintf('<div><a href="#" class="primary" onclick="executeSteps(2);">{0}</a></div>',message['update_btn']));
+				StepCounter.incrementStep(1);
+				$("#info").append(sprintf('<div><a href="#" class="primary" onclick="executeSteps(StepCounter.step);">{0}</a></div>',message['update_btn']));
 			}
 	},
 	failed);
@@ -38,7 +60,8 @@ var checkVersionFileExists = function()
 		if(data.exists)
 		{
 			$("#info").append(sprintf('<div>{0}</div>',message['update_file_exists']));
-			executeSteps(1);
+			StepCounter.incrementStep(1);
+			executeSteps(StepCounter.step);
 		}
 		else
 		{
@@ -56,7 +79,8 @@ var checkWritablilty = function()
 		 if(data.writable)
 		 {
 			 $("#info").append(sprintf('<div>{0}</div>',message['files_are_writable']));
-			 executeSteps(3);
+			 StepCounter.incrementStep(1);
+			 executeSteps(StepCounter.step);
 		 }
 		 else
 		 {
@@ -76,34 +100,37 @@ var clearWaiting = function()
 		$(".waiting").removeClass("waiting");
 }
 
-
-var executeNextStep = function()
-{
-
-}
-
 var executeSteps = function(step)
 {
 	switch(step)
 	{
-		case 0:
+		case Step.CheckVersionFileExists:
 			checkVersionFileExists();
 			break;
-		case 1:
+		case Step.CheckVersion:
 			checkVersion();
 			break;
-		case 2:
+		case Step.CheckWritability:
 			 clearLinks();
 			 checkWritablilty();
 			 break;
-		case 3:
+		case Step.InstallFiles:
 			installFiles();
 			break;
-	 case 4:
+	 case Step.UpdateVersion:
 			updateVersion();
 			break;
-		case 5:
+		case Step.CheckForScripts:
+			checkForScripts();
+			break;
+		case Step.ExecuteScripts:
+			executeScripts();
+			break;
+		case Step.Finished:
 			finished();
+			break;
+		default:
+		  stepNotFound(step);
 			break;
 	}
 }
@@ -127,7 +154,8 @@ var installFiles = function()
 	$.get("controller.php","action=InstallFiles").then(function(data){
 			clearWaiting();
 			$("#info").append(sprintf('<div>{0}</div>',message['files_installed']));
-			executeSteps(4);
+			StepCounter.incrementStep(1);
+			executeSteps(StepCounter.step);
 	},failed);
 }
 
@@ -141,13 +169,39 @@ var sprintf = function()
 	 return message;
 }
 
+var Step = {
+	CheckVersionFileExists : 0,
+	CheckVersion: 1,
+	CheckWritability: 2,
+	InstallFiles: 3,
+	CheckForScripts: 4,
+	ExecuteScripts: 5,
+	UpdateVersion: 6,
+	Finished: 7
+}
+
+var StepCounter = {
+	 step: 0,
+	 incrementStep: function(incBy)
+	 {
+		 this.step += incBy;
+	 }
+}
+
+var stepNotFound = function(step)
+{
+	clearLinks();
+	$("#info").append(sprintf(sprintf('<div>{0}</div>',message['step_not_found']),step));
+}
+
 var updateVersion = function()
 {
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['updating_version']));
 	$.get("controller.php","action=UpdateVersion").then(function(data){
 			clearWaiting();
 			$("#info").append(sprintf('<div>{0}</div>',message['version_file_updated']));
-			executeSteps(5);
+			StepCounter.incrementStep(1);
+			executeSteps(StepCounter.step);
 	},failed);
 }
 

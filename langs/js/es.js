@@ -1,4 +1,5 @@
 var message = [];
+message['check_for_scripts'] = 'Comprobando que existe scripts';
 message['check_version_file_exists'] = 'Comprobando que el archivo de actualización existe';
 message['version_up_to_date'] = 'La versión ya está actualizada a {0}';
 message['version_out_of_date'] = 'La versión {0} está desactualizada. La última versión es {1}';
@@ -14,3 +15,8 @@ message['update_file_does_not_exist'] = 'El archivo de actualización ({0}) no s
 message['update_file_exists'] = 'El archivo de actualización existe';
 message['updating_version'] = 'Actualizando el archivo de versión';
 message['version_file_updated'] = 'Se actualizó el archivo de versión';
+message['scripts_exists'] = 'Los scripts existen';
+message['no_scripts_exists'] = 'No hay scripts para ejecutar';
+message['running_scripts'] = 'Ejecutando los scripts';
+message['scripts_finished'] = 'Ya se terminaron los scripts';
+message['step_not_found'] = 'No se encontró el paso {0}';
