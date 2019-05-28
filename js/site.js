@@ -9,6 +9,25 @@ var advanceStep = function(step)
 	return ++step;
 }
 
+var backupFiles = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['backup_files']));
+	$.get("controller.php","action=BackupFiles").then(function(data)
+	{
+		clearWaiting();
+		if(data.success)
+		{
+			  $("#info").append(sprintf('<div>{0}</div>',message['backup_success']));
+				StepCounter.incrementStep(1);
+				executeSteps(StepCounter.step);
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['backup_failed']));
+		}
+	}, failed);
+}
+
 var checkForScripts = function()
 {
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['check_for_scripts']));
@@ -71,6 +90,23 @@ var checkVersionFileExists = function()
 
 }
 
+var checkRemoteFiles = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['check_remote_files_exist']));
+	$.get("controller.php","action=CheckRemoteFilesExist").then(function(data){
+		if(data.exists)
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['remote_files_exist']));
+			StepCounter.incrementStep(1);
+			executeSteps(StepCounter.step);
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['remote_files_dont_exist']));
+		}
+	});
+}
+
 var checkWritablilty = function()
 {
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['check_files_are_writable']));
@@ -100,10 +136,24 @@ var clearWaiting = function()
 		$(".waiting").removeClass("waiting");
 }
 
+var executeScripts = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['running_scripts']));
+	$.get("controller.php","action=ExecuteScripts").then(function(data)
+	{
+		$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['scripts_finished']));
+		StepCounter.incrementStep(1);
+		executeSteps(StepCounter.step);
+	},failed);
+}
+
 var executeSteps = function(step)
 {
 	switch(step)
 	{
+		case Step.BackupFiles:
+			backupFiles();
+			break;
 		case Step.CheckVersionFileExists:
 			checkVersionFileExists();
 			break;
@@ -114,10 +164,13 @@ var executeSteps = function(step)
 			 clearLinks();
 			 checkWritablilty();
 			 break;
+		case Step.CheckRemoteFilesExist:
+			checkRemoteFiles();
+			break;
 		case Step.InstallFiles:
 			installFiles();
 			break;
-	 case Step.UpdateVersion:
+	 	case Step.UpdateVersion:
 			updateVersion();
 			break;
 		case Step.CheckForScripts:
@@ -173,11 +226,13 @@ var Step = {
 	CheckVersionFileExists : 0,
 	CheckVersion: 1,
 	CheckWritability: 2,
-	InstallFiles: 3,
-	CheckForScripts: 4,
-	ExecuteScripts: 5,
-	UpdateVersion: 6,
-	Finished: 7
+	CheckRemoteFilesExist: 3,
+	BackupFiles: 4,
+	InstallFiles: 5,
+	CheckForScripts: 6,
+	ExecuteScripts: 7,
+	UpdateVersion: 8,
+	Finished: 9
 }
 
 var StepCounter = {

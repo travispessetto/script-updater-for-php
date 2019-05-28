@@ -9,6 +9,49 @@ call_user_func(array($controller,$action));
 
 class Controller
 {
+
+  public function BackupFiles()
+  {
+    $zip = new ZipArchive();
+    $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
+    $filename = "backup-$currentVersion.zip";
+    if($zip->open($filename,ZipArchive::CREATE) !== TRUE)
+    {
+      echo json_encode(array('success'=>false));
+    }
+    else
+    {
+      $config = ConfigSingleton::Instance();
+      $updateFiles = Spyc::YAMLLoad($this->GetUpdateFile());
+      $updateFiles = $updateFiles['files'];
+      $updateFolder = realpath($config->update_folder).'/';
+      if(array_key_exists('add',$updateFiles))
+      {
+          $addFiles = $updateFiles['add'];
+          for($i = 0; $i < count($addFiles); $i++)
+          {
+            if(file_exists($updateFolder.$addFiles[$i]['local']))
+            {
+              if($zip->addFile($updateFolder.$addFiles[$i]['local'],$addFiles[$i]['local']) === false)
+              {
+                echo json_encode(array('success'=>false));
+                exit();
+              }
+            }
+          }
+          $deleteFiles = $updateFiles['delete'];
+          for($i = 0; $i < count($deleteFiles); $i++)
+          {
+            if(file_exists($updateFolder.$deleteFiles[$i]))
+            {
+              $zip->addFile($updateFolder.$deleteFiles[$i]);
+            }
+          }
+      }
+    }
+    echo json_encode(array('success'=>true));
+
+  }
    public function CheckFilesAreWritable()
    {
       $config = ConfigSingleton::Instance();
@@ -36,7 +79,7 @@ class Controller
      {
        foreach($spyc['scripts'] as $script)
        {
-         if(!file_exists($updateFolder.'/'.$script['file']))
+         if(!file_exists($updateFolder.'/'.$script))
          {
            $exists = false;
            break;
@@ -46,17 +89,60 @@ class Controller
      echo json_encode(array('exists'=>$exists));
    }
 
+   public function CheckRemoteFilesExist()
+   {
+    $config = ConfigSingleton::Instance();
+    $updateFiles = Spyc::YAMLLoad($this->GetUpdateFile());
+    $updateFiles = $updateFiles['files'];
+     if(array_key_exists('add',$updateFiles))
+      {
+          $addFiles = $updateFiles['add'];
+          for($i = 0; $i < count($addFiles); $i++)
+          {
+            $fileHeaders = @get_headers($config->version_url."/".$addFiles[$i]['remote']);
+            if(!$fileHeaders || $fileHeaders[0] == 'HTTP/1.1 404 Not Found') {
+              echo json_encode(array('exists'=>false));
+              exit();
+            }
+          }
+      }
+      echo json_encode(array('exists'=>true));
+   }
+
    public function CheckUpdateFileExists()
    {
      $config = ConfigSingleton::Instance();
      $versionUrl = $config->version_url.'/'.$config->version_file;
-     $file = file_get_contents($versionUrl);
+     $file = @file_get_contents($versionUrl);
      $exists = true;
      if($file === false)
      {
        $exists = false;
      }
      echo json_encode(array('exists'=>$exists,'url'=>$versionUrl));
+   }
+
+   public function ExecuteScripts()
+   {
+      $spyc = Spyc::YAMLLoad($this->GetUpdateFile());
+      $config = ConfigSingleton::Instance();
+      $updateFolder = realPath($config->update_folder);
+      $exists = true;
+      if(!array_key_exists('scripts',$spyc))
+      {
+        $exists = false;
+      }
+      else
+      {
+        foreach($spyc['scripts'] as $script)
+        {
+          if(file_exists($updateFolder.'/'.$script))
+          {
+            include_once($updateFolder.'/'.$script);
+          }
+        }
+      }
+      echo json_encode(array());
    }
 
    public function InstallFiles()
@@ -70,7 +156,7 @@ class Controller
           $addFiles = $updateFiles['add'];
           for($i = 0; $i < count($addFiles); $i++)
           {
-               $content = file_get_contents($config->version_url."/".$addFiles[$i]['remote']);
+               $content = @file_get_contents($config->version_url."/".$addFiles[$i]['remote']);
                $pathInfo = pathinfo($updateFolder.$addFiles[$i]['local']);
                if(!file_exists($pathInfo['dirname']))
                {
@@ -88,13 +174,16 @@ class Controller
       {
           for($i = 0; $i < count($updateFiles['delete']); $i++)
           {
-            if(is_dir($updateFolder.$updateFiles['delete'][$i]))
+            if(file_exists($updateFolder.$updateFiles['delete'][$i]))
             {
-              rmdir($updateFolder.$updateFiles['delete'][$i]);
-            }
-            else
-            {
-              unlink($updateFolder.$updateFiles['delete'][$i]);
+              if(is_dir($updateFolder.$updateFiles['delete'][$i]))
+              {
+                rmdir($updateFolder.$updateFiles['delete'][$i]);
+              }
+              else
+              {
+                unlink($updateFolder.$updateFiles['delete'][$i]);
+              }
             }
           }
       }

@@ -38,15 +38,24 @@ sequence being a mapping with `local` and `remote` defined.  `local` is where
 you want the downloaded file to go and `remote` is where to get it from the
 update server.
 
+The `script` section defines scripts you want to run after everything is added
+and deleted.  This is useful for database updates and possibly some other cases.
+However, note that there are no protection against scripts.  In other words, there
+are no backups from what the script does unless you handle it yourself.  Scripts
+will not be deleted after execution.
+
 Below is an example of a YAML update file:
 
 ```
-version:    1.0.17
+version:    1.1.17
 files:
         add:
             - {local: "foo/bar/writable/foobar.txt", remote: "files/foobar.txt"}
+            - {local: "scripts/writefile.php", remote: "files/writefile.php.txt"}
         delete:
             - "foo/foo.txt"
+scripts:
+    - "scripts/writefile.php"
 ```
 
 ## Setup the Updater
@@ -64,13 +73,27 @@ for that version.
 
 ## Current Failsafes
 
-There is currently only one failsafe for the update.  That is it checks for
-file writability before it trys to install the files.  This is to prevent an
-update from being only partially completed and, as a result, having your scripts
-not work right.
+The following failsafes are in place:
 
-In the future we hope to implement a rollback system that can undo the changes
-if the update fails when installing files.
+### Writability Check
+
+All files are checked before downloading to make sure they are writable
+
+### File Backup
+
+All files that are going to be added and currently exist or are going to be deleted
+are added to a backup file named backup-{version}.zip in the same folder as the
+updater script.
+
+### Remote File Check
+
+All remote files are checked to exist before they are installed. 
+
+## Help Me Out
+
+I would love people to fork this project and contribute.  If not that I would be interested
+in who uses this product.  See my website https://pessetto.com to find my email and shoot
+me a quick message if you use and like this product.
 
 ## Notice of Spyc
 
