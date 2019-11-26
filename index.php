@@ -22,5 +22,11 @@ require_once("./langs/language.php");
 <div id="info">
   <div><?php echo Language::Instance()->check_version; ?> <span class="waiting"></span></div>
 </div>
+<div id="count">
+    <!-- hitwebcounter Code START -->
+    <a href="https://www.hitwebcounter.com" target="_blank">
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7165217&style=0007&nbdigits=5&type=ip&initCount=0" title="Counter For Website Hitwebcounter" Alt="hitwebcounter.com"   border="0" >
+    </a>
+</div>   
 </body>
 </html>

@@ -49,3 +49,10 @@ a.primary:hover
 {
   background: #00ffff;
 }
+
+#count
+{
+  position: absolute;
+  bottom: 1em;
+  right: 1em;
+}
