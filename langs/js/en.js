@@ -26,3 +26,6 @@ message['remote_files_dont_exist'] = "One or more remote files not found<br />Up
 message['backup_files'] = "Backing up files";
 message['backup_success'] = "Backup created";
 message['backup_failed'] = "Backup failed";
+message['check_for_backups'] = "Checking for backups";
+message['backups_found'] = "Backups were found";
+message['backups_not_found'] = "Backups were not found";

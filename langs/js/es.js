@@ -28,3 +28,6 @@ message['scripts_executed'] = "Scripts ejecutados";
 message['backup_files'] = "Haciendo copia de seguridad de archivos";
 message['backup_success'] = "Se hizo copia de seguridad de archivos";
 message['backup_failed'] = "Se falló hacer el copia de seguridad de archivos";
+message['check_for_backups'] = "Buscando si hay copias de seguridad de archivos";
+message['backups_found'] = "Se encontraron copias de seguridad de archivos";
+message['backups_not_found'] = "no se encontraron copias de seguridad de archivos";

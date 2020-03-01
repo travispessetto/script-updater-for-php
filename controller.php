@@ -65,6 +65,19 @@ class Controller
       echo json_encode(array("writable"=>$writable));
    }
 
+   public function CheckForBackups()
+   {
+     $config = ConfigSingleton::Instance();
+     $updateFolder = realPath($config->update_folder);
+     $exists = false;
+     $files = glob("$updateFolder/backup-*\.zip");
+     if(count($files) > 0)
+     {
+        $exists = true;
+     }
+     echo json_encode(array('exists'=>$exists,'files'=>$files));
+   }
+
    public function CheckForScripts()
    {
      $spyc = Spyc::YAMLLoad($this->GetUpdateFile());

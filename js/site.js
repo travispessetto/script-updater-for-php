@@ -28,6 +28,25 @@ var backupFiles = function()
 	}, failed);
 }
 
+var checkForBackups = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['check_for_backups']));
+	$.get("controller.php","action=CheckForBackups").then(function(data)
+	{
+		clearWaiting();
+		if(data.exists)
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['backups_found']));
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['backups_not_found']));
+			StepCounter.step = Step.CheckVersionFileExists;
+			executeScripts(StepCounter.step);
+		}
+	},failed);
+}
+
 var checkForScripts = function()
 {
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['check_for_scripts']));
@@ -151,6 +170,9 @@ var executeSteps = function(step)
 {
 	switch(step)
 	{
+		case Step.CheckForBackups:
+			checkForBackups();
+			break;
 		case Step.BackupFiles:
 			backupFiles();
 			break;
@@ -223,16 +245,21 @@ var sprintf = function()
 }
 
 var Step = {
-	CheckVersionFileExists : 0,
-	CheckVersion: 1,
-	CheckWritability: 2,
-	CheckRemoteFilesExist: 3,
-	BackupFiles: 4,
-	InstallFiles: 5,
-	CheckForScripts: 6,
-	ExecuteScripts: 7,
-	UpdateVersion: 8,
-	Finished: 9
+	CheckForBackups:	0,
+	BackupsExist: 1,
+	ChooseBackupFile: 2,
+	RestoreBackup: 3,
+	RestorationComplete: 4,
+	CheckVersionFileExists : 5,
+	CheckVersion: 6,
+	CheckWritability: 7,
+	CheckRemoteFilesExist: 8,
+	BackupFiles: 9,
+	InstallFiles: 10,
+	CheckForScripts: 11,
+	ExecuteScripts: 12,
+	UpdateVersion: 13,
+	Finished: 14
 }
 
 var StepCounter = {
