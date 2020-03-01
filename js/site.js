@@ -2,6 +2,7 @@ $(document).ready(function()
 {
 		setInterval(waiting,1000);
 		executeSteps(StepCounter.step);
+		$(document).on('click','a',clearLinks);
 });
 
 var advanceStep = function(step)
@@ -37,8 +38,8 @@ var checkForBackups = function()
 		if(data.exists)
 		{
 			$("#info").append(sprintf('<div>{0}</div>',message['backups_found']));
-			$("#info").append(springf('<div>{0}</div>',message['prompt_update_backup']));
-			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);">{0}</a>&nbsp;><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{1}</a></div>',message['prompt_update_btn']));
+			$("#info").append(sprintf('<div>{0}</div>',message['prompt_update_backup']));
+			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);">{0}</a>&nbsp;><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{1}</a></div>',message['prompt_update_btn'],message['prompt_restore_btn']));
 		}
 		else
 		{
@@ -149,7 +150,7 @@ var checkWritablilty = function()
 
 var clearLinks = function()
 {
-	$("a").remove();
+	$("#info a").remove();
 }
 
 var clearWaiting = function()
@@ -185,7 +186,6 @@ var executeSteps = function(step)
 			checkVersion();
 			break;
 		case Step.CheckWritability:
-			 clearLinks();
 			 checkWritablilty();
 			 break;
 		case Step.CheckRemoteFilesExist:
@@ -286,7 +286,6 @@ var StepCounter = {
 
 var stepNotFound = function(step)
 {
-	clearLinks();
 	$("#info").append(sprintf(sprintf('<div>{0}</div>',message['step_not_found']),step));
 }
 
