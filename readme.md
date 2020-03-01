@@ -7,9 +7,9 @@ location and the remote location.  So, potentially Amazon S3 could be used.
 
 Did we mention that this update script can adapt to languages?  All you need is
 the appropriate language files in js/langs and langs/php.  There are currently
-two languages supported out of the box, English and Spanish.  The script will
-default to English if it cannot find a suitable language file based on the
-brower's settings.
+three languages supported out of the box, English, Spanish, and German.  The
+script will default to English if it cannot find a suitable language file based
+on the brower's settings.
 
 ## Screen Shots
 
@@ -71,6 +71,12 @@ If you would like to have each version have its own update script you can make
 sure you include the updaters config.php in the updates with the new location
 for that version.
 
+## Restoring Backups
+
+When the user goes to the update screen it will check for the existance of
+backup-{version} files.  If they exist then a prompt will ask if they would
+like to restore a backup or check for updates.
+
 ## Current Failsafes
 
 The following failsafes are in place:
@@ -94,6 +100,24 @@ All remote files are checked to exist before they are installed.
 I would love people to fork this project and contribute.  If not that I would be interested
 in who uses this product.  See my website https://pessetto.com to find my email and shoot
 me a quick message if you use and like this product.
+
+## Tools
+
+The following tools exist for testing purposes or to simply make your life easier when
+creating a update file.  They can be found in the tools folder of this repository. Some
+may be accessed via a command line/terminal with PHP installed others will need to use
+a web browser.
+
+### Update Test
+
+This script will generate two folders in the root of the repository, update-test and
+backup-test-source.  If you have a test webserver setup you can then test if the
+backup system works by visting backup-test.  This is good for testing updates
+and restoring for backups.
+
+To run this script you will need to make sure the repository is somewhere the web browser
+can see it and then point the browser to the repsoitory's URL with appended with
+`tools\update-test.php`.
 
 ## Notice of Spyc
 
