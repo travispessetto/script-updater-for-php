@@ -33,7 +33,7 @@ copy("../index.php","../update-test/index.php");
 $configContents = <<<EOD
 <?php
 \$config['version_url'] = "{url}";
-\$config['version_file'] = "version.txt";
+\$config['version_file'] = "update.yml";
 \$config["update_folder"] = "./";
 EOD;
 
@@ -42,11 +42,15 @@ $linkUrl = explode('/', $linkUrl);
 array_pop($linkUrl);
 array_pop($linkUrl);
 $linkUrl = implode('/', $linkUrl);
-$linkUrl .= "/update-test-source/update.yml";
+$linkUrl .= "/update-test-source";
 
 $configContents = str_replace("{url}",$linkUrl,$configContents);
 
 file_put_contents("../update-test/config.php",$configContents);
+
+file_put_contents('../update-test/test1.txt',"If this is unchanged it's bad");
+file_put_contents('../update-test/test2.txt',"Nobody changed me ");
+file_put_contents('../update-test/test2.txt',"I should be deleted");
 
 function copy_directory($src,$dst) {
 	$dir = opendir($src);

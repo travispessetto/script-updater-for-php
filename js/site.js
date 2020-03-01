@@ -37,12 +37,14 @@ var checkForBackups = function()
 		if(data.exists)
 		{
 			$("#info").append(sprintf('<div>{0}</div>',message['backups_found']));
+			$("#info").append(springf('<div>{0}</div>',message['prompt_update_backup']));
+			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);">{0}</a>&nbsp;><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{1}</a></div>',message['prompt_update_btn']));
 		}
 		else
 		{
 			$("#info").append(sprintf('<div>{0}</div>',message['backups_not_found']));
 			StepCounter.step = Step.CheckVersionFileExists;
-			executeScripts(StepCounter.step);
+			executeSteps(StepCounter.step);
 		}
 	},failed);
 }
@@ -267,6 +269,18 @@ var StepCounter = {
 	 incrementStep: function(incBy)
 	 {
 		 this.step += incBy;
+	 },
+
+	 incrementAndExecuteStep: function(incBy)
+	 {
+		 this.step += incBy;
+		 executeSteps(this.step);
+	 },
+
+	 setStepAndExecute: function(step)
+	 {
+		 this.step = step;
+		 executeSteps(this.step);
 	 }
 }
 

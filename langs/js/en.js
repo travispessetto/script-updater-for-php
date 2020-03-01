@@ -29,3 +29,6 @@ message['backup_failed'] = "Backup failed";
 message['check_for_backups'] = "Checking for backups";
 message['backups_found'] = "Backups were found";
 message['backups_not_found'] = "Backups were not found";
+message['prompt_update_backup'] = "What would you like to do?";
+message['prompt_update_btn'] = "Check for updates";
+message['prompt_restore_btn'] = "Restore a backup";

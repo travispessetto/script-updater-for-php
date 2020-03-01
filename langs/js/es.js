@@ -31,3 +31,6 @@ message['backup_failed'] = "Se falló hacer el copia de seguridad de archivos";
 message['check_for_backups'] = "Buscando si hay copias de seguridad de archivos";
 message['backups_found'] = "Se encontraron copias de seguridad de archivos";
 message['backups_not_found'] = "no se encontraron copias de seguridad de archivos";
+message['prompt_update_backup'] = "¿Qué quieres hacer?";
+message['prompt_update_btn'] = "Buscar actualizaciones";
+message['prompt_restore_btn'] = "Restaurar copia de seguridad";
