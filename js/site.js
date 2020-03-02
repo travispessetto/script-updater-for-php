@@ -39,7 +39,7 @@ var checkForBackups = function()
 		{
 			$("#info").append(sprintf('<div>{0}</div>',message['backups_found']));
 			$("#info").append(sprintf('<div>{0}</div>',message['prompt_update_backup']));
-			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);">{0}</a>&nbsp;><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{1}</a></div>',message['prompt_update_btn'],message['prompt_restore_btn']));
+			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{0}</a>&nbsp;<a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);">{1}</a></div>',message['prompt_update_btn'],message['prompt_restore_btn']));
 		}
 		else
 		{
