@@ -13,7 +13,7 @@ files:
         add:
             - {local: "test1.txt", remote: "test1.txt"}
             - {local: "test2.txt", remote: "test2.txt"}
-            - {local: "update-source-version.php", remote: "update-source-version.php"}
+            - {local: "update-source-version.php", remote: "update-source-version.txt"}
         delete:
             - "test3.txt"
 scripts:
@@ -22,13 +22,15 @@ EOD;
 echo "Making update script<br />";
 $phpUpdateScript = <<<EOD
 <?php
-    \$content = file_get_contents(__DIR__.'../update-test-source/update.yml');
-    \$version = preg_match("/0\\.0\\.(\\d+)/m",\$content,\$matches);
-    \$incValue = ++\$matches[1];
-    \$content = str_replace("0.0.\$matches[1]","0.0.\$incValue",\$content);
+    \$content = file_get_contents(__DIR__.'/../update-test-source/update.yml');
+    error_log("Content: \$content");
+    \$version = preg_match("/1\\.0\\.(\\d+)/m",\$content,\$matches);
+    \$incValue = \$matches[1] + 1;
+    \$content = str_replace("1.0.\$matches[1]","\$incValue.0.\$incValue",\$content);
+    error_log("New content: \$content");
     file_put_contents('../update-test-source/update.yml',\$content);
 EOD;
-file_put_contents("../update-test-source/update-source-version.php",$phpUpdateScript);
+file_put_contents("../update-test-source/update-source-version.txt",$phpUpdateScript);
 file_put_contents('../update-test-source/update.yml',$yamlContents); 
 echo "Making update-test folder<br />";
 mkdir('../update-test');
