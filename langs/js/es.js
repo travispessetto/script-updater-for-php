@@ -34,3 +34,5 @@ message['backups_not_found'] = "no se encontraron copias de seguridad de archivo
 message['prompt_update_backup'] = "¿Qué quieres hacer?";
 message['prompt_update_btn'] = "Buscar actualizaciones";
 message['prompt_restore_btn'] = "Restaurar copia de seguridad";
+message['fetching_backup_versions'] = "Buscando versiones de copia de seguridad";
+message['prompt_restore_version'] = "¿Cual versión quieres restaurar?";

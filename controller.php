@@ -75,7 +75,7 @@ class Controller
      {
         $exists = true;
      }
-     echo json_encode(array('exists'=>$exists,'files'=>$files));
+     echo json_encode(array('exists'=>$exists));
    }
 
    public function CheckForScripts()
@@ -133,6 +133,24 @@ class Controller
        $exists = false;
      }
      echo json_encode(array('exists'=>$exists,'url'=>$versionUrl));
+   }
+
+   public function ChooseBackupFile()
+   {
+    $config = ConfigSingleton::Instance();
+    $updateFolder = realPath($config->update_folder);
+    $exists = false;
+    $files = glob("$updateFolder/backup-*\.zip");
+    $versions = array();
+    foreach($files as $file)
+    {
+      preg_match("/backup-(\d+\.\d+\.\d+)\.zip/",$file,$matches);
+      if(count($matches) > 0)
+      {
+        array_push($versions,$matches[1]);
+      }
+    }
+    echo json_encode(array("versions"=>$versions));
    }
 
    public function ExecuteScripts()

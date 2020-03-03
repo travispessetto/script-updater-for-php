@@ -32,3 +32,5 @@ message['backups_not_found'] = "Backups were not found";
 message['prompt_update_backup'] = "What would you like to do?";
 message['prompt_update_btn'] = "Check for updates";
 message['prompt_restore_btn'] = "Restore a backup";
+message['fetching_backup_versions'] = "Fetching backup versions";
+message['prompt_restore_version'] = "Which version do you wish to restore?";

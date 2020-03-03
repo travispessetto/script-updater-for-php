@@ -148,9 +148,24 @@ var checkWritablilty = function()
 	},failed);
 }
 
+var chooseBackupFile = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class=\"waiting\"></span>',message["fetching_backup_versions"]));
+	$.get("controller.php",'action=ChooseBackupFile').then(function(data)
+	{
+		clearWaiting();
+		$("#info").append(sprintf('<div>{0}</div>',message['prompt_restore_version']));
+		for(var i = 0; i < data.versions.length; ++i)
+		{
+			$("#info").append(sprintf('<div><a class="primary" onclick="">{0}</a></div>',data.versions[i]));
+		}
+
+	},failed);
+}
+
 var clearLinks = function()
 {
-	$("#info a").remove();
+	$("#info a").parent("div").remove();
 }
 
 var clearWaiting = function()
@@ -178,6 +193,9 @@ var executeSteps = function(step)
 			break;
 		case Step.BackupFiles:
 			backupFiles();
+			break;
+		case Step.ChooseBackupFile:
+			chooseBackupFile();
 			break;
 		case Step.CheckVersionFileExists:
 			checkVersionFileExists();
