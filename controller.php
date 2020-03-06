@@ -241,6 +241,7 @@ class Controller
       {
         file_put_contents("version.txt",$version);
         echo json_encode(array('success'=>true));
+        unlink($zipFile);
       }
       else
       {

@@ -128,6 +128,15 @@ can see it and then point the browser to the repsoitory's URL with appended with
 In order to parse YAML we are using the [Spyc](https://github.com/mustangostang/spyc)
 library by Vladimir Andersen.  This is licensed under the [MIT License](https://github.com/mustangostang/spyc/blob/master/COPYING).
 
+## Development TODO
+
+The following still needs to be done before the next release happens:
+
+*  Fix all current issues
+*  Make backups have a restore-{version}.yml file that can be used to delete files that should not be there
+*  Make it so the yaml can have a restore scripts that will be added to restore-{version}.yml
+*  Restoration should restore all versions that are more current then the restore version and delete them after each restore
+
 ## License
 
 Copyright (c) 2017 Travis Pessetto
