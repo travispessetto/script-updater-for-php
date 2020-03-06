@@ -34,3 +34,5 @@ message['prompt_update_btn'] = "Check for updates";
 message['prompt_restore_btn'] = "Restore a backup";
 message['fetching_backup_versions'] = "Fetching backup versions";
 message['prompt_restore_version'] = "Which version do you wish to restore?";
+message['restoring_backup'] = "Restoring {0}";
+message['restoration_finished'] = "Restoration finished";

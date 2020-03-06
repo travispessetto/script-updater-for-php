@@ -14,7 +14,11 @@ class Controller
   {
     $zip = new ZipArchive();
     $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
-    $filename = "backup-$currentVersion.zip";
+    $filename = __DIR__."/backups/backup-$currentVersion.zip";
+    if(!file_exists(__DIR__."/backups"))
+    {
+      mkdir(__DIR__."/backups");
+    }
     if($zip->open($filename,ZipArchive::CREATE) !== TRUE)
     {
       echo json_encode(array('success'=>false));
@@ -70,7 +74,7 @@ class Controller
      $config = ConfigSingleton::Instance();
      $updateFolder = realPath($config->update_folder);
      $exists = false;
-     $files = glob("$updateFolder/backup-*\.zip");
+     $files = glob("$updateFolder/backups/backup-*\.zip");
      if(count($files) > 0)
      {
         $exists = true;
@@ -140,7 +144,7 @@ class Controller
     $config = ConfigSingleton::Instance();
     $updateFolder = realPath($config->update_folder);
     $exists = false;
-    $files = glob("$updateFolder/backup-*\.zip");
+    $files = glob("$updateFolder/backups/backup-*\.zip");
     $versions = array();
     foreach($files as $file)
     {
@@ -220,6 +224,28 @@ class Controller
       }
 
       echo json_encode(array());
+   }
+
+   public function RestoreBackup()
+   {
+      $config = ConfigSingleton::Instance();
+      $version = $_GET['version'];
+      $restoreTo = realpath($config->update_folder).'/';
+      $zipFile = __DIR__."/backups/backup-$version.zip";
+      $zip = new ZipArchive;
+      if(!file_exists($zipFile))
+      {
+        echo json_encode(array("success"=>false));
+      }
+      else if($zip->open($zipFile) === true && $zip->extractTo($restoreTo))
+      {
+        file_put_contents("version.txt",$version);
+        echo json_encode(array('success'=>true));
+      }
+      else
+      {
+        echo json_encode(array('success'=>false));
+      }
    }
 
    public function UpdateVersion()

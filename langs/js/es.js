@@ -36,3 +36,5 @@ message['prompt_update_btn'] = "Buscar actualizaciones";
 message['prompt_restore_btn'] = "Restaurar copia de seguridad";
 message['fetching_backup_versions'] = "Buscando versiones de copia de seguridad";
 message['prompt_restore_version'] = "¿Cual versión quieres restaurar?";
+message['restoring_backup'] = "Restaurando {0}";
+message['restoration_finished'] = "Copia de seguridad restaurada";

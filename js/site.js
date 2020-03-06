@@ -157,7 +157,7 @@ var chooseBackupFile = function()
 		$("#info").append(sprintf('<div>{0}</div>',message['prompt_restore_version']));
 		for(var i = 0; i < data.versions.length; ++i)
 		{
-			$("#info").append(sprintf('<div><a class="primary" onclick="">{0}</a></div>',data.versions[i]));
+			$("#info").append(sprintf('<div><a class="primary" onclick="restoreBackup(\''+data.versions[i]+'\');">{0}</a></div>',data.versions[i]));
 		}
 
 	},failed);
@@ -228,6 +228,17 @@ var executeSteps = function(step)
 		  stepNotFound(step);
 			break;
 	}
+}
+
+var restoreBackup = function(version)
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',sprintf(message['restoring_backup'],version)));
+	$.get("controller.php",'action=restoreBackup&version='+version).then(
+	function(data)
+	{
+		clearWaiting();
+		$("#info").append(sprintf("<div>{0}</div>",message['restoration_finished']));
+	},failed);
 }
 
 var failed = function(xhr,status,error)
