@@ -25,6 +25,10 @@ The code is currently up to date
 
 The update has finished
 
+![Imgur](https://i.imgur.com/enVBO6O.png)
+
+Prompt if you want to restore backup
+
 ## Setup the Update Script
 
 To use this update script you will need to define a YAML file that explains
