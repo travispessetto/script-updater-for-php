@@ -38,19 +38,36 @@ class Controller
             {
               if($zip->addFile($updateFolder.$addFiles[$i]['local'],$addFiles[$i]['local']) === false)
               {
+                $zip->close();
+                unlink($filename);
                 echo json_encode(array('success'=>false));
                 exit();
               }
             }
           }
-          $deleteFiles = $updateFiles['delete'];
-          for($i = 0; $i < count($deleteFiles); $i++)
+      }
+      if(array_key_exists('delete',$updateFiles))
+      {
+        error_log("Delete files");
+        $deleteFiles = $updateFiles['delete'];
+        for($i = 0; $i < count($deleteFiles); $i++)
+        {
+          if(file_exists($updateFolder.$deleteFiles[$i]))
           {
-            if(file_exists($updateFolder.$deleteFiles[$i]))
+            error_log("Add deleted file $deleteFiles[$i]");
+            if($zip->addFile($updateFolder.$deleteFiles[$i]) === false)
             {
-              $zip->addFile($updateFolder.$deleteFiles[$i]);
+              $zip->close();
+              unlink($filename);
+              echo json_encode(array('success'=>false));
+              exit();
             }
           }
+        }
+      }
+      else
+      {
+        error_log("No delete file");
       }
     }
     echo json_encode(array('success'=>true));

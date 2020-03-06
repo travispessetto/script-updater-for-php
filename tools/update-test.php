@@ -63,7 +63,7 @@ file_put_contents("../update-test/config.php",$configContents);
 
 file_put_contents('../update-test/test1.txt',"If this is unchanged it's bad");
 file_put_contents('../update-test/test2.txt',"Nobody changed me ");
-file_put_contents('../update-test/test2.txt',"I should be deleted");
+file_put_contents('../update-test/test3.txt',"I should be deleted");
 
 function copy_directory($src,$dst) {
 	$dir = opendir($src);
