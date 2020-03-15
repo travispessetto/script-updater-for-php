@@ -55,7 +55,7 @@ class Controller
           if(file_exists($updateFolder.$deleteFiles[$i]))
           {
             error_log("Add deleted file $deleteFiles[$i]");
-            if($zip->addFile($updateFolder.$deleteFiles[$i]) === false)
+            if($zip->addFile($updateFolder.$deleteFiles[$i],$deleteFiles[$i]) === false)
             {
               $zip->close();
               unlink($filename);
