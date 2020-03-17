@@ -17,7 +17,10 @@ files:
         delete:
             - "test3.txt"
 scripts:
-    - "update-source-version.php"
+    do:
+        - {script: "update-source-version.php", delete: true}
+    undo:
+        - {script: "test-undo.php", remote: "undo/test-undo.txt", delete: true}
 EOD;
 echo "Making update script<br />";
 $phpUpdateScript = <<<EOD
@@ -30,6 +33,11 @@ $phpUpdateScript = <<<EOD
     error_log("New content: \$content");
     file_put_contents('../update-test-source/update.yml',\$content);
 EOD;
+$testUndo = <<<EOD
+<?php
+    file_put_contents("undo-test.txt","This file should exist on an undo");
+EOD;
+file_put_contents("../update-test-source/undo/test-undo.txt",$testUndo);
 file_put_contents("../update-test-source/update-source-version.txt",$phpUpdateScript);
 file_put_contents('../update-test-source/update.yml',$yamlContents); 
 echo "Making update-test folder<br />";

@@ -36,3 +36,6 @@ message['fetching_backup_versions'] = "Fetching backup versions";
 message['prompt_restore_version'] = "Which version do you wish to restore?";
 message['restoring_backup'] = "Restoring {0}";
 message['restoration_finished'] = "Restoration finished";
+message['add_undo_scripts'] = "Adding undo scripts to backup";
+message['undo_scripts_added'] = "Undo scripts successfully added to backup";
+message['add_undo_scripts_failed'] = "Failed adding undo scripts to backup";

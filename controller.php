@@ -10,8 +10,69 @@ call_user_func(array($controller,$action));
 class Controller
 {
 
+  public function __call($name,$args)
+  {
+      http_response_code(404);
+      echo "No function $name exists";
+  }
+
+  public function AddUndoScripts()
+  {
+    $zip = new ZipArchive();
+    $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
+    $filename = __DIR__."/backups/backup-$currentVersion.zip";
+    try
+    {
+      $config = ConfigSingleton::Instance();
+      $spyc = Spyc::YAMLLoad($this->GetUpdateFile());
+      if(!file_exists($filename))
+      {
+        unlink($filename);
+        echo json_encode(array('success'=>false));
+        exit();
+      }
+      if($zip->open($filename,ZipArchive::CREATE) !== true)
+      {
+        unlink($filename);
+        echo json_encode(array('success'=>false));
+        exit();
+      }
+      $restoreFile = $zip->getFromName('restore.yml');
+      if(array_key_exists("scripts",$spyc) && array_key_exists("undo",$spyc['scripts']))
+      {
+        $restoreFile .= "scripts:".PHP_EOL;
+        foreach($spyc['scripts']['undo'] as $script)
+        {
+          $name = $script['script'];
+          $content = @file_get_contents($config->version_url."/".$script['remote']);
+          $delete = $script['delete'] ? "true" : "false";
+          $restoreFile .= "\t- {script: \"$name\", delete: $delete}".PHP_EOL;
+          $zip->addFromString($name,$content);
+        }
+        $zip->addFromString('restore.yml',$restoreFile);
+        $zip->close();
+        echo json_encode(array('success'=>true));
+        exit();
+      }
+      else
+      {
+        // NO scripts to add...success
+        echo json_encode(array('success'=>true));
+        exit();
+      }
+    }
+    catch(Exception $ex)
+    {
+      unlink($filename);
+      http_response_code(500);
+      echo $ex->getMessage();
+    }
+
+  }
+
   public function BackupFiles()
   {
+    $undoYaml = "delete:".PHP_EOL;
     $zip = new ZipArchive();
     $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
     $filename = __DIR__."/backups/backup-$currentVersion.zip";
@@ -44,17 +105,20 @@ class Controller
                 exit();
               }
             }
+            // File does not exist.  Therefore should be deleted when restored
+            else 
+            {
+                $undoYaml .= "\t\t".$addFiles[$i]['local'].PHP_EOL;
+            }
           }
       }
       if(array_key_exists('delete',$updateFiles))
       {
-        error_log("Delete files");
         $deleteFiles = $updateFiles['delete'];
         for($i = 0; $i < count($deleteFiles); $i++)
         {
           if(file_exists($updateFolder.$deleteFiles[$i]))
           {
-            error_log("Add deleted file $deleteFiles[$i]");
             if($zip->addFile($updateFolder.$deleteFiles[$i],$deleteFiles[$i]) === false)
             {
               $zip->close();
@@ -65,11 +129,9 @@ class Controller
           }
         }
       }
-      else
-      {
-        error_log("No delete file");
-      }
     }
+    $zip->addFromString("restore.yml",$undoYaml);
+    $zip->close();
     echo json_encode(array('success'=>true));
 
   }
@@ -111,9 +173,9 @@ class Controller
      }
      else
      {
-       foreach($spyc['scripts'] as $script)
+       foreach($spyc['scripts']['do'] as $script)
        {
-         if(!file_exists($updateFolder.'/'.$script))
+         if(!file_exists($updateFolder.'/'.$script['script']))
          {
            $exists = false;
            break;
@@ -180,17 +242,21 @@ class Controller
       $config = ConfigSingleton::Instance();
       $updateFolder = realPath($config->update_folder);
       $exists = true;
-      if(!array_key_exists('scripts',$spyc))
+      if(!array_key_exists('scripts',$spyc) || !array_key_exists('do',$spyc['scripts']))
       {
         $exists = false;
       }
       else
       {
-        foreach($spyc['scripts'] as $script)
+        foreach($spyc['scripts']['do'] as $script)
         {
-          if(file_exists($updateFolder.'/'.$script))
+          if(file_exists($updateFolder.'/'.$script['script']))
           {
-            include_once($updateFolder.'/'.$script);
+            include_once($updateFolder.'/'.$script['script']);
+            if($script['delete'])
+            {
+              unlink($updateFolder.'/'.$script['script']);
+            }
           }
         }
       }

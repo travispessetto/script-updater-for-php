@@ -38,3 +38,6 @@ message['fetching_backup_versions'] = "Buscando versiones de copia de seguridad"
 message['prompt_restore_version'] = "¿Cual versión quieres restaurar?";
 message['restoring_backup'] = "Restaurando {0}";
 message['restoration_finished'] = "Copia de seguridad restaurada";
+message['add_undo_scripts'] = "Agregando scripts de deshacer a la copia de seguridad";
+message['undo_scripts_added'] = "Salio bien el agregar scripts de deshacer a la copia de seguridad";
+message['add_undo_scripts_failed'] = "Falló el agregar scripts de deshacer a la copia de seguridad";

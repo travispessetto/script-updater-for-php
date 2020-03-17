@@ -5,6 +5,24 @@ $(document).ready(function()
 		$(document).on('click','a',clearLinks);
 });
 
+var addUndoScripts = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',message['add_undo_scripts']));
+	$.get('controller.php','action=AddUndoScripts').then(function(data)
+	{
+		clearWaiting();
+		if(data.success)
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['undo_scripts_added']));
+			StepCounter.incrementAndExecuteStep(1);
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['add_undo_scripts_failed']));
+		}
+	},failed);
+}
+
 var advanceStep = function(step)
 {
 	return ++step;
@@ -218,6 +236,9 @@ var executeSteps = function(step)
 		case Step.CheckForScripts:
 			checkForScripts();
 			break;
+		case Step.AddUndoScripts:
+			addUndoScripts();
+			break;
 		case Step.ExecuteScripts:
 			executeScripts();
 			break;
@@ -288,9 +309,10 @@ var Step = {
 	BackupFiles: 9,
 	InstallFiles: 10,
 	CheckForScripts: 11,
-	ExecuteScripts: 12,
-	UpdateVersion: 13,
-	Finished: 14
+	AddUndoScripts: 12,
+	ExecuteScripts: 13,
+	UpdateVersion: 14,
+	Finished: 15
 }
 
 var StepCounter = {

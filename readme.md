@@ -42,11 +42,16 @@ sequence being a mapping with `local` and `remote` defined.  `local` is where
 you want the downloaded file to go and `remote` is where to get it from the
 update server.
 
-The `script` section defines scripts you want to run after everything is added
-and deleted.  This is useful for database updates and possibly some other cases.
-However, note that there are no protection against scripts.  In other words, there
-are no backups from what the script does unless you handle it yourself.  Scripts
-will not be deleted after execution.
+The `script` section defines two sections `do` and `undo`.  The `do` section
+defines what will execute when all files have been added, updated, or deleted.
+Each script in the `do` section must define if it should be deleted after execution
+by setting `delete` to either `true` or `false`.  See the example below if you are
+confused.  In the `undo` section you have scripts that will need to be executed
+if someone chooses to revert to a backup.  This section requires `script`, `remote`,
+and `delete` sections.  These scripts will be added to the backup file and will be
+retrieved from `remote`.  The `delete` section specifies if it will be deleted after
+the backup is restored.
+
 
 Below is an example of a YAML update file:
 
@@ -59,7 +64,10 @@ files:
         delete:
             - "foo/foo.txt"
 scripts:
-    - "scripts/writefile.php"
+        do:
+            - {script: "scripts/writefile.php", delete: true}
+        undo:
+            - {script: "scripts/deletefile.php", remote: "scripts/deletefile.php", delete: true}
 ```
 
 ## Setup the Updater
@@ -94,6 +102,23 @@ All files are checked before downloading to make sure they are writable
 All files that are going to be added and currently exist or are going to be deleted
 are added to a backup file named backup-{version}.zip in the same folder as the
 updater script.
+
+**Note:** No backup of any databases are taken at this time and probably will not
+happen anytime in the near future as I want this to be database agnostic.  That
+said, it may take more work but you can use the first position in the script section
+to make a backup of the database.
+
+The file backup will contain a YAML script name restore.yml that will provide instructions
+on how to recover the backup.  It will simply contain two sections: `delete` and `scripts`.
+It will look similar to the following:
+
+```
+delete:
+        - "scripts/foo.php"
+        - "scripts/bar.php"
+scripts:
+        - {script: "scripts/rollbackmigration.php", delete: true}
+```
 
 ### Remote File Check
 
