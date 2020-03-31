@@ -1,11 +1,21 @@
 <?php
 
+if(file_exists("../update-test-source") && is_dir("../update-test-source"))
+{
+    rrmdir("../update-test-source");
+}
+if(file_exists("../update-test") && is_dir("../update-test"))
+{
+    rrmdir("../update-test");
+}
 echo "Generating update test folders<br />";
 echo "Making update-test-source<br />";
 mkdir('../update-test-source');
+mkdir("../update-test-source/undo");
 echo "Making test files<br />";
 file_put_contents('../update-test-source/test1.txt',"This is a test file");
 file_put_contents('../update-test-source/test2.txt',"This is a second test file");
+file_put_contents('../update-test-source/test4.txt',"I should be here on update; removed on restore.");
 echo "Making YAML test file<br />";
 $yamlContents = <<<EOD
 version:    1.0.0
@@ -13,6 +23,7 @@ files:
         add:
             - {local: "test1.txt", remote: "test1.txt"}
             - {local: "test2.txt", remote: "test2.txt"}
+            - {local: "test4.txt", remote: "test4.txt"}
             - {local: "update-source-version.php", remote: "update-source-version.txt"}
         delete:
             - "test3.txt"
@@ -87,4 +98,24 @@ function copy_directory($src,$dst) {
 		}
 	}
 	closedir($dir);
+}
+
+function rrmdir($src) {
+    echo "Removing DIR: $src<br />";
+    $src = realpath($src);
+    $dir = opendir($src);
+    while(false !== ( $file = readdir($dir)) ) {
+        if (( $file != '.' ) && ( $file != '..' )) {
+            $full = $src . '/' . $file;
+            if ( is_dir($full) ) {
+                rrmdir($full);
+            }
+            else {
+                echo "Removing FILE: $full<br />";
+                unlink($full);
+            }
+        }
+    }
+    closedir($dir);
+    rmdir($src);
 }

@@ -181,8 +181,9 @@ var chooseBackupFile = function()
 	},failed);
 }
 
-var clearLinks = function()
+var clearLinks = function(event)
 {
+	event.preventDefault();
 	$("#info a").parent("div").remove();
 }
 

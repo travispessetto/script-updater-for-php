@@ -87,8 +87,8 @@ class Controller
     else
     {
       $config = ConfigSingleton::Instance();
-      $updateFiles = Spyc::YAMLLoad($this->GetUpdateFile());
-      $updateFiles = $updateFiles['files'];
+      $spyc = Spyc::YAMLLoad($this->GetUpdateFile());
+      $updateFiles = $spyc['files'];
       $updateFolder = realpath($config->update_folder).'/';
       if(array_key_exists('add',$updateFiles))
       {
@@ -105,10 +105,15 @@ class Controller
                 exit();
               }
             }
-            // File does not exist.  Therefore should be deleted when restored
+            // File does not exist.  Therefore it maybe should be deleted when restored
             else 
             {
-                $undoYaml .= "\t\t-".$addFiles[$i]['local'].PHP_EOL;
+              if(!(array_key_exists("scripts",$spyc) && array_key_exists('do',$spyc['scripts'])
+                && ($scriptIndex = array_search($addFiles[$i]['local'],array_column($spyc['scripts']['do'],'script'))) !== false
+                && $spyc['scripts']['do'][$scriptIndex]['delete']))
+              {
+                $undoYaml .= "\t\t- ".$addFiles[$i]['local'].PHP_EOL;
+              }
             }
           }
       }
@@ -327,9 +332,9 @@ class Controller
         if(file_exists($yamlFile))
         {
           $spyc = Spyc::YAMLLoad($yamlFile);
-          if(array_key_exists("delete",$spyc))
+          if(array_key_exists("delete",$spyc) && is_array($spyc['delete']))
           {
-            foreacH($spyc["delete"] as $file)
+            foreach($spyc["delete"] as $file)
             {
               if(is_dir($file))
               {
