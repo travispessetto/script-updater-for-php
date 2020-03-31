@@ -108,7 +108,7 @@ class Controller
             // File does not exist.  Therefore should be deleted when restored
             else 
             {
-                $undoYaml .= "\t\t".$addFiles[$i]['local'].PHP_EOL;
+                $undoYaml .= "\t\t-".$addFiles[$i]['local'].PHP_EOL;
             }
           }
       }
@@ -322,9 +322,30 @@ class Controller
       }
       else if($zip->open($zipFile) === true && $zip->extractTo($restoreTo))
       {
+        // delete all files from the yaml file if it exists
+        $yamlFile = "$restoreTo/restore.yml";
+        if(file_exists($yamlFile))
+        {
+          $spyc = Spyc::YAMLLoad($yamlFile);
+          if(array_key_exists("delete",$spyc))
+          {
+            foreacH($spyc["delete"] as $file)
+            {
+              if(is_dir($file))
+              {
+                rmdir($file);
+              }
+              else
+              {
+                unlink($file);
+              }
+            }
+          }
+        }
         file_put_contents("version.txt",$version);
         echo json_encode(array('success'=>true));
         unlink($zipFile);
+        unlink($yamlFile);
       }
       else
       {
