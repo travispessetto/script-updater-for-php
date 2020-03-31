@@ -183,7 +183,6 @@ var chooseBackupFile = function()
 
 var clearLinks = function(event)
 {
-	event.preventDefault();
 	$("#info a").parent("div").remove();
 }
 
