@@ -10,6 +10,25 @@ call_user_func(array($controller,$action));
 class Controller
 {
 
+  public function __construct()
+  {
+      $plugins = scandir(__DIR__."/plugins");
+      foreach($plugins as $plugin)
+      {
+        $plugin = "./plugins/$plugin";
+        if(!is_dir($plugin))
+        {
+          require_once($plugin);
+          $klass = ucfirst(pathinfo($plugin,PATHINFO_FILENAME));
+          $instance = new $klass();
+          if(method_exists($instance,"ConstructorHook"))
+          {
+            $instance->ConstructorHook();
+          }
+        }
+      }
+  }
+
   public function __call($name,$args)
   {
       http_response_code(404);
@@ -190,6 +209,31 @@ class Controller
      echo json_encode(array('exists'=>$exists));
    }
 
+   public function CheckIfUpdaterIsBeingUpdated()
+   {
+     $spyc = Spyc::YAMLLoad(($this->GetUpdateFile()));
+     $updateFiles = $spyc['files'];
+     $deleteFiles = $spyc['delete'];
+     $currentDir = __DIR__;
+     foreach($updateFiles as $file)
+     {
+       if(strpos($currentDir,realpath($file['local'])) !== false)
+       {
+            echo json_encode(array("update"=>true));
+            exit();
+       }
+     }
+     foreach($deleteFiles as $file)
+     {
+        if(strpos($currentDir,realpath($file['local'])) !== false)
+        {
+            echo json_encode(array("update"=>true));
+            exit();
+        }
+     }
+     echo json_encode(array("update"=>false));
+   }
+
    public function CheckRemoteFilesExist()
    {
     $config = ConfigSingleton::Instance();
@@ -239,6 +283,12 @@ class Controller
       }
     }
     echo json_encode(array("versions"=>$versions));
+   }
+
+   public function CreateAuxController()
+   {
+      copy("controller.php","auxController.php");
+      echo json_encode(array("success"=>true));
    }
 
    public function ExecuteScripts()

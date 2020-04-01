@@ -41,3 +41,6 @@ message['restoration_finished'] = "Copia de seguridad restaurada";
 message['add_undo_scripts'] = "Agregando scripts de deshacer a la copia de seguridad";
 message['undo_scripts_added'] = "Salio bien el agregar scripts de deshacer a la copia de seguridad";
 message['add_undo_scripts_failed'] = "Falló el agregar scripts de deshacer a la copia de seguridad";
+message['check_if_updater_files_being_updated'] = "Comprobando si se actualiza el actualizador";
+message['create_aux_controller'] = "Haciendo el controlador auxiliar";
+message['aux_controllor_created'] = "Se hizo el controlador auxiliar";

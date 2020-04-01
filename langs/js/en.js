@@ -39,3 +39,6 @@ message['restoration_finished'] = "Restoration finished";
 message['add_undo_scripts'] = "Adding undo scripts to backup";
 message['undo_scripts_added'] = "Undo scripts successfully added to backup";
 message['add_undo_scripts_failed'] = "Failed adding undo scripts to backup";
+message['check_if_updater_files_being_updated'] = "Checking to see if updater script will be updated";
+message['create_aux_controller'] = "Creating auxiliary controller";
+message['aux_controllor_created'] = "Auxiliary controller created";

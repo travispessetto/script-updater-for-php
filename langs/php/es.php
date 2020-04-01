@@ -1,5 +1,5 @@
 <?php
-$message['check_version'] = "Comprobando versión";
+$message['welcome'] = "Bienvenido al Actualizador";
 $message['file_not_found'] = "No se encontró el archivo";
 $message['title'] = "Actualizador";
 $message['author'] = "Por Travis Pessetto";

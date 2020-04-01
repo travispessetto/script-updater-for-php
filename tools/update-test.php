@@ -62,6 +62,7 @@ copy_directory("../lib","../update-test/lib");
 copy("../configsingleton.php","../update-test/configsingleton.php");
 copy("../controller.php","../update-test/controller.php");
 copy("../index.php","../update-test/index.php");
+copy_directory("../plugins","../update-test/plugins");
 $configContents = <<<EOD
 <?php
 \$config['version_url'] = "{url}";

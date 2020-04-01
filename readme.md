@@ -83,6 +83,57 @@ If you would like to have each version have its own update script you can make
 sure you include the updaters config.php in the updates with the new location
 for that version.
 
+## Plugins
+
+Updater allows plugins to make your life a little bit easier.  I mainly did
+this for tasks like authorization.  To create a plugin simply put a php
+file in the plugins directory with a class named the same. See example.
+
+```php
+<?php
+    class Authorize
+    {
+        // Hooks go here
+    }
+```
+
+### Hooks
+
+#### Constructor Hook
+
+The contructor hook will execute when the controller constructor is called.
+Therefore, anything that should apply to all functions, such as authorization
+should be called there.  This is done by adding the public function of 
+```ConstructorHook()``` to your plugin file.  The constructor hooks really
+should either do nothing or return a header, such as forbidden if you do
+not want to continue.
+
+```php
+<?php
+    class Authorize
+    {
+        public function ContructorHook()
+        {
+            // Authorization logic use exit(); if you need to terminate.
+        }
+    }
+```
+
+An example of an Authorize plugin that would not authorize anyone is as follows:
+
+```php
+class Authorize
+{
+    public function ConstructorHook()
+    {
+        // authorization logic here...call exit if not
+        // authorized.
+        header('HTTP/1.0 403 Forbidden');
+        exit();
+    }
+}
+```
+
 ## Restoring Backups
 
 When the user goes to the update screen it will check for the existance of
