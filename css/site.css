@@ -36,18 +36,20 @@ h6 > a
 
 a.primary
 {
+  display: inline-block;
   position: relative;
-  top: 40px;
+  margin-top: 20px;
   padding: 20px 20px;
   color: #fff;
-  background: #00cccc;
+  background: #00ffff;
   text-decoration: none;
   font-weight: bold;
 }
 
 a.primary:hover
 {
-  background: #00ffff;
+  background: #00cccc;
+  cursor: pointer;
 }
 
 #count

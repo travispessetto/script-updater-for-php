@@ -212,8 +212,8 @@ class Controller
    public function CheckIfUpdaterIsBeingUpdated()
    {
      $spyc = Spyc::YAMLLoad(($this->GetUpdateFile()));
-     $updateFiles = $spyc['files'];
-     $deleteFiles = $spyc['delete'];
+     $updateFiles = $spyc['files']['add'];
+     $deleteFiles = $spyc['files']['delete'];
      $currentDir = __DIR__;
      foreach($updateFiles as $file)
      {
@@ -225,7 +225,7 @@ class Controller
      }
      foreach($deleteFiles as $file)
      {
-        if(strpos($currentDir,realpath($file['local'])) !== false)
+        if(strpos($currentDir,realpath($file)) !== false)
         {
             echo json_encode(array("update"=>true));
             exit();
@@ -329,6 +329,31 @@ class Controller
         }
       }
       echo json_encode(array());
+   }
+
+   public function FindAllNewerBackups()
+   {
+      $restoreVersion = $_GET['restoreVersion'];
+      $config = ConfigSingleton::Instance();
+      $updateFolder = realPath($config->update_folder);
+      $files = glob("$updateFolder/backups/backup-*\.zip");
+      $versions = array();
+      foreach($files as $file)
+      {
+        preg_match("/backup-(\d+\.\d+\.\d+)\.zip/",$file,$matches);
+        if(count($matches) > 0)
+        {
+          $version = $matches[1];
+          if($this->IsNewerVersion($restoreVersion,$version))
+          {
+            $versions []= $version;
+          }
+        }
+      }
+      $versions []= "0.0.0";
+      usort($versions,array($this,"VersionOrganizerComparator"));
+      echo json_encode(array("restoreVersions"=>$versions));
+
    }
 
    public function InstallFiles()
@@ -547,6 +572,22 @@ class Controller
     return $writable;
    }
 
+   private function VersionOrganizerComparator($a,$b)
+   {
+      if($a == $b)
+      {
+        return 0;
+      }
+      if($this->IsNewerVersion($a,$b))
+      {
+        return 1;
+      }
+      else
+      {
+        return -1;
+      }
+   }
+
    private function GetUpdateFile()
    {
       $config = ConfigSingleton::Instance();
@@ -562,6 +603,41 @@ class Controller
       {
         return $contents;
       }
+   }
+
+   private function IsNewerVersion($currentVersion,$version)
+   {
+     if($currentVersion == $version)
+     {
+       return false;
+     }
+     $currentVersionSlices = explode('.',$currentVersion);
+     $versionSlices = explode('.',$version);
+    // if $versionSlices is shorter than $currentVersionSlices pad with zeros
+    if(count($versionSlices) < count($currentVersionSlices))
+    {
+       $difference = count($currentVersionSlices) - count($versionSlices);
+       for($i = 0; $i < $difference; ++$i)
+       {
+         $versionSlices[]= 0;
+       }
+    }
+    else if(count($versionSlices) > count($currentVersionSlices))
+    {
+       $difference = count($versionSlices) - count($currentVersionSlices);
+       for($i = 0; $i < $difference; ++$i)
+       {
+         $currentVersionSlices[]= 0;
+       }
+    }
+    for($i = 0; $i < count($versionSlices); ++$i)
+    {
+       if($versionSlices[$i] > $currentVersionSlices[$i])
+       {
+         return true;
+       }
+    }
+    return false;
    }
 
 

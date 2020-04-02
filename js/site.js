@@ -5,6 +5,10 @@ $(document).ready(function()
 		setInterval(waiting,1000);
 		executeSteps(StepCounter.step);
 		$(document).on('click','a',clearLinks);
+		$(document).on('click','a[href="#"]',function(event)
+		{
+			event.preventDefault();
+		});
 });
 
 var addUndoScripts = function()
@@ -194,7 +198,7 @@ var chooseBackupFile = function()
 		$("#info").append(sprintf('<div>{0}</div>',message['prompt_restore_version']));
 		for(var i = 0; i < data.versions.length; ++i)
 		{
-			$("#info").append(sprintf('<div><a class="primary" onclick="restoreBackup(\''+data.versions[i]+'\');">{0}</a></div>',data.versions[i]));
+			$("#info").append(sprintf('<div><a class="primary" onclick="findAllNewerBackupsAndRestoreRequestedBackup(\''+data.versions[i]+'\');">{0}</a></div>',data.versions[i]));
 		}
 
 	},failed);
@@ -313,14 +317,31 @@ var executeSteps = function(step)
 	}
 }
 
-var restoreBackup = function(version)
+var findAllNewerBackupsAndRestoreRequestedBackup = function(version)
 {
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['find_newer_backups']));
+	$.get(CONTROLLER,"action=FindAllNewerBackups&restoreVersion="+version).then(function(data)
+	{
+		clearWaiting();
+		restoreBackup(data.restoreVersions);
+
+	},failed);
+	
+}
+
+var restoreBackup = function(versionArr)
+{
+	var version = versionArr.shift();
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',sprintf(message['restoring_backup'],version)));
 	$.get(CONTROLLER,'action=restoreBackup&version='+version).then(
 	function(data)
 	{
 		clearWaiting();
-		$("#info").append(sprintf("<div>{0}</div>",message['restoration_finished']));
+		$("#info").append(sprintf("<div>{0}</div>",sprintf(message['version_restoration_finished'],version)));
+		if(versionArr.length > 0)
+		{
+			restoreBackup(versionArr);
+		}
 	},failed);
 }
 
