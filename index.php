@@ -12,7 +12,7 @@ require_once("./langs/language.php");
   <?php else: ?>
     <script src="langs/js/en.js"></script>
   <?php endif; ?>
-  <script src="js/site.js"></script>
+  <script src="js/site.js?time=<?php echo time(); ?>"></script>
 </head>
 <body>
 <div class="header">

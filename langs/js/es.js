@@ -44,3 +44,6 @@ message['add_undo_scripts_failed'] = "Falló el agregar scripts de deshacer a la
 message['check_if_updater_files_being_updated'] = "Comprobando si se actualiza el actualizador";
 message['create_aux_controller'] = "Haciendo el controlador auxiliar";
 message['aux_controllor_created'] = "Se hizo el controlador auxiliar";
+message['delete_aux_controller'] = "Desechando el controlador auxiliar";
+message['aux_controller_deleted'] = "Se desechó el controlador auxiliar";
+message['aux_controller_delete_failed'] = "No se pudo desechar el controlador auxiliar";

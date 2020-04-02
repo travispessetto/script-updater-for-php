@@ -291,6 +291,19 @@ class Controller
       echo json_encode(array("success"=>true));
    }
 
+   /// CAUTION: This function must always exist!
+   public function DeleteAuxController()
+   {
+      if(file_exists("auxController.php"))
+      {
+        echo json_encode(array("success"=>unlink("auxController.php")));
+      }
+      else
+      {
+        echo json_encode(array("success"=>true));
+      }
+   }
+
    public function ExecuteScripts()
    {
       $spyc = Spyc::YAMLLoad($this->GetUpdateFile());

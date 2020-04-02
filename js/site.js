@@ -222,6 +222,26 @@ var createAuxController = function()
 	},failed);
 }
 
+var deleteAuxController = function()
+{
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['delete_aux_controller']));
+	CONTROLLER = "controller.php";
+	$.get(CONTROLLER,'action=DeleteAuxController').then(function(data)
+	{
+		clearWaiting();
+		if(data.success)
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['aux_controller_deleted']));
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['aux_controller_delete_failed']));
+		}
+		// It's not critical so continue even if not deleted
+		StepCounter.incrementAndExecuteStep(1);
+	},failed);
+}
+
 var executeScripts = function()
 {
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['running_scripts']));
@@ -280,6 +300,9 @@ var executeSteps = function(step)
 			break;
 		case Step.ExecuteScripts:
 			executeScripts();
+			break;
+		case Step.DeleteAuxController:
+			deleteAuxController();
 			break;
 		case Step.Finished:
 			finished();
@@ -352,8 +375,9 @@ var Step = {
 	CheckForScripts: 13,
 	AddUndoScripts: 14,
 	ExecuteScripts: 15,
-	UpdateVersion: 16,
-	Finished: 17
+	DeleteAuxController: 16,
+	UpdateVersion: 17,
+	Finished: 18
 }
 
 var StepCounter = {
