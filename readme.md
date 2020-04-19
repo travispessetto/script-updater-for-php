@@ -1,5 +1,7 @@
 # Script Updater for PHP
 
+[![Build Status](https://travis-ci.org/travispessetto/script-updater-for-php.svg?branch=master)](https://travis-ci.org/travispessetto/script-updater-for-php)
+
 Script Updater for PHP is an update script that can be used with any PHP project to update
 the files via a couple clicks.  The script only requires that it can get at a
 update file that contains the current version as well as the local filesystem
