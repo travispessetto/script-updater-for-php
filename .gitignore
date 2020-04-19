@@ -1,3 +1,5 @@
 update-test/
 update-test-source/
 .vscore/
+vendor/
+composer.lock
