@@ -4,3 +4,4 @@ update-test-source/
 vendor/
 composer.lock
 phpd.log
+chromedriver.log
