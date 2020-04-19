@@ -4,7 +4,11 @@ php:
   - 7.2
 before_install:
   - sudo apt-get -y update
+  - sudo apt install unzip
 
 install:
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo apt --fix-broken  install ./google-chrome-stable_current_amd64.deb
+  - wget https://chromedriver.storage.googleapis.com/81.0.4044.69/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  
