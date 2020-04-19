@@ -8,4 +8,10 @@ final class ControllerTest extends TestCase
     {
         $this->assertEquals(true,true);
     }
+
+    public function testPhpWebserverActive()
+    {
+        $result = file_get_contents("http://localhost:9000");
+        $this->assertNotFalse($result);
+    }
 }

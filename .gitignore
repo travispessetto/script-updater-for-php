@@ -3,3 +3,4 @@ update-test-source/
 .vscore/
 vendor/
 composer.lock
+phpd.log
