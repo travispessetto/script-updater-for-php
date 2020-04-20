@@ -9,6 +9,7 @@ before_install:
   - composer install
   - composer update
   - npm install @nesk/puphpeteer
+  - composer require nesk/puphpeteer
 install:
   - nohup php -S localhost:9000 -t src/ > phpd.log  2>&1 &
 script: phpunit tests
