@@ -2,6 +2,7 @@ update-test/
 update-test-source/
 .vscore/
 vendor/
+node_modules/
 composer.lock
 phpd.log
 chromedriver.log

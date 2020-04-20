@@ -7,10 +7,15 @@ before_install:
   - sudo apt install unzip
   - sudo apt install nodejs
   - composer install
-  - composer update
+  - npm install @nesk/rialto
   - npm install @nesk/puphpeteer
   - composer require nesk/puphpeteer
   - composer dump-autoload
+  # Enable user namespace cloning
+  - "sysctl kernel.unprivileged_userns_clone=1"
+  # Launch XVFB
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
 install:
   - nohup php -S localhost:9000 -t src/ > phpd.log  2>&1 &
 script: phpunit tests
