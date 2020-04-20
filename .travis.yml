@@ -7,6 +7,7 @@ before_install:
   - sudo apt install unzip
   - sudo apt install nodejs
   - composer install
+  - composer update
   - npm install @nesk/puphpeteer
 install:
   - nohup php -S localhost:9000 -t src/ > phpd.log  2>&1 &
