@@ -1,7 +1,7 @@
 <?php
 use PHPUnit\Framework\TestCase;
-use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Nesk\Puphpeteer\Puppeteer;
+use Nesk\Rialto\Data\JsFunction;
 
 final class ControllerTest extends TestCase
 {
@@ -20,14 +20,15 @@ final class ControllerTest extends TestCase
 
     // Test to make sure Selenium is up and running
     // Webdriver basics at https://github.com/php-webdriver/php-webdriver/blob/master/example.php
-    public function testSeleniumSetup()
+    public function testPuPHPeteer()
     {
-        $host = 'http://localhost:4444';
-        $capabilities = DesiredCapabilities::chrome();
-        $driver = RemoteWebDriver::create($host, $capabilities);
-        $driver->get("http://localhost:9000");
-        $title = strtolower($driver->getTitle());
-        $gotTitle = strpos($title,"updater") !== false;
-        $this->assertTrue($gotTitle,"Selenium driver does not appear to be started");
+        $puppeteer = new Puppeteer;
+        $browser = $puppeteer->launch();
+        $page = $browser->newPage();
+        $page->goto('http://localhost:9000');
+        $title = strtolower($page->title());
+        $browser->close();
+        $passed = strpos($title,"updater") !== false;
+        $this->assertTrue($passed,"Puppeteer failed.");
     }
 }
