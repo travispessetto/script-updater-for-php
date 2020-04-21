@@ -18,4 +18,4 @@ before_install:
   # - "sh -e /etc/init.d/xvfb start"
 install:
   - nohup php -S localhost:9000 -t src/ > phpd.log  2>&1 &
-script: phpunit tests
+script: ./vendor/bin/phpunit tests
