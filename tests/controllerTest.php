@@ -50,7 +50,8 @@ final class ControllerTest extends TestCase
       $browser = $puppeteer->launch();
       $page = $browser->newPage();
       $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/");
-      $page->waitFor(".waiting");
+      $selector = $page->querySelector(".waiting");
+      $this->assertNotNull($selector);
       $page->waitForSelector("#updateVersion");
     }
 
