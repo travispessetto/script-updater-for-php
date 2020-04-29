@@ -29,4 +29,4 @@ before_install:
   - sudo service apache2 restart
   - sudo chown -R www-data:www-data ./
   - sudo chmod -R 755 ./
-script: ./vendor/bin/phpunit tests --verbose
+script: ./vendor/bin/phpunit --verbose tests 
