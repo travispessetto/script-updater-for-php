@@ -127,7 +127,7 @@ var checkVersion = function()
 			{
 				$("#info").append(sprintf('<div>'+message['version_out_of_date']+'</div>',data.current_version, data.update_version));
 				StepCounter.incrementStep(1);
-				$("#info").append(sprintf('<div><a href="#" class="primary" onclick="executeSteps(StepCounter.step);">{0}</a></div>',message['update_btn']));
+				$("#info").append(sprintf('<div><a href="#" class="primary" onclick="executeSteps(StepCounter.step);" id="updateVersion">{0}</a></div>',message['update_btn']));
 			}
 	},
 	failed);
