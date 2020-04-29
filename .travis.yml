@@ -4,6 +4,7 @@ php:
   - 7.2
 before_install:
   - sudo apt-get -y update
+  - sudo apt-get install curl
   - sudo apt install unzip
   - sudo apt install nodejs
   - composer install
@@ -27,4 +28,6 @@ before_install:
   - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
   - sudo service apache2 restart
-script: ./vendor/bin/phpunit --verbose tests 
+script: 
+  - ./vendor/bin/phpunit --verbose tests 
+  - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/source
