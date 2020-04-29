@@ -4,11 +4,7 @@ class Language
 {
   protected function __construct()
   {
-      $lang = "en";
-      if(isset($_SERVER) && array_key_exists("HTTP_ACCEPT_LANGUAGE",$_SERVER))
-      {
-        $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
-      }
+      $lang = $this->LanguageCode();
       $langFile = dirname(__FILE__)."/php/$lang.php";
       if(file_exists($langFile))
       {
@@ -43,7 +39,11 @@ class Language
 
   public function LanguageCode()
   {
-    $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    $lang = "en";
+    if(isset($_SERVER) && array_key_exists("HTTP_ACCEPT_LANGUAGE",$_SERVER))
+    {
+      $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+    }
     return $lang;
   }
 
