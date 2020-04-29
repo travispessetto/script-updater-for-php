@@ -30,4 +30,4 @@ before_install:
   - sudo service apache2 restart
 script: 
   - ./vendor/bin/phpunit --verbose tests 
-  - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/source
+  - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/
