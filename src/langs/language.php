@@ -5,7 +5,7 @@ class Language
   protected function __construct()
   {
       $lang = "en";
-      if(is_set($_SERVER) && array_key_exists("HTTP_ACCEPT_LANGUAGE",$_SERVER))
+      if(isset($_SERVER) && array_key_exists("HTTP_ACCEPT_LANGUAGE",$_SERVER))
       {
         $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
       }
