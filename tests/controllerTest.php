@@ -25,7 +25,7 @@ final class ControllerTest extends TestCase
     // Test to make sure the internal PHP server is up and running
     public function testPhpWebserverActive()
     {
-        $result = file_get_contents("http://localhost:9000");
+        $result = file_get_contents("http://localhost");
         $this->assertNotFalse($result,"PHP Internal server does not appear to be started");
     }
 
@@ -36,7 +36,7 @@ final class ControllerTest extends TestCase
         $puppeteer = new Puppeteer;
         $browser = $puppeteer->launch();
         $page = $browser->newPage();
-        $page->goto('http://localhost:9000');
+        $page->goto('http://localhost');
         $title = strtolower($page->title());
         $browser->close();
         $passed = strpos($title,"updater") !== false;
@@ -49,7 +49,7 @@ final class ControllerTest extends TestCase
       $puppeteer = new Puppeteer;
       $browser = $puppeteer->launch();
       $page = $browser->newPage();
-      $page->goto("http://localhost:9000/scenarios/UpdateAvalibleLocalDirNoExist/target/");
+      $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/");
       $page->waitForSelector("#updateVersion");
     }
 
