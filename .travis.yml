@@ -27,6 +27,4 @@ before_install:
   - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
   - sudo service apache2 restart
-  - sudo chown -R www-data:www-data ./
-  - sudo chmod -R 755 ./
 script: ./vendor/bin/phpunit --verbose tests 

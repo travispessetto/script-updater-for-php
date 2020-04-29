@@ -56,11 +56,19 @@ final class ControllerTest extends TestCase
     private function prepare_scenario($scenario)
     {
       $directory = "./scenarios/$scenario/target";
-      $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
-      $this->recurse_copy(realpath("./src/"),"./scenarios/$scenario/target");
-      unlink(realpath("./scenarios/$scenario/target/config.php"));
-      copy(realpath("./tests/scenarios/$scenario/target/config.php"),"./scenarios/$scenario/target/config.php");
-      $this->recurse_copy(realpath("./tests/scenarios/$scenario/source"),"./scenarios/$scenario/source");
+      $workingDir = getcwd();
+      try
+      {
+        $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
+        $this->recurse_copy(realpath("./src/"),"./scenarios/$scenario/target");
+        unlink(realpath("./scenarios/$scenario/target/config.php"));
+        copy(realpath("./tests/scenarios/$scenario/target/config.php"),"./scenarios/$scenario/target/config.php");
+        $this->recurse_copy(realpath("./tests/scenarios/$scenario/source"),"./scenarios/$scenario/source");
+      }
+      catch(Exception $ex)
+      {
+        $this->assertTrue(false,"Could not create folder $directory in $cwd.");
+      }
     }
 
     private function recurse_copy($src,$dst) {
