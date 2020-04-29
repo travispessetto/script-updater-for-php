@@ -29,4 +29,4 @@ before_install:
   - sudo service apache2 restart
 install:
   - nohup php -S localhost:9000 -t src/ > phpd.log  2>&1 &
-script: phpunit tests
+script: ./vendor/bin/phpunit tests
