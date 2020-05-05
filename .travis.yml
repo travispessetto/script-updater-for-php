@@ -1,7 +1,7 @@
 language: php
-dist: xenial
+dist: bionic
 php:
-  - 7.2
+  - 7.4
 before_install:
   - sudo apt-get -y update
   - sudo apt-get install curl
