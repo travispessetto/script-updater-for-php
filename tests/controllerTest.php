@@ -46,7 +46,7 @@ final class ControllerTest extends TestCase
     public function testUpdateAvalibleDirNoExistScenario()
     {
       $this->prepare_scenario("UpdateAvalibleLocalDirNoExist");
-      $puppeteer = new Puppeteer;
+      $puppeteer = new Puppeteer(['read_timeout' => 300]); // seconds used here
       $browser = $puppeteer->launch();
       $page = $browser->newPage();
       $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/",["timeout"=>300000]); //milliseconds used here
