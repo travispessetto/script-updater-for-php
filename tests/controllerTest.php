@@ -66,18 +66,19 @@ final class ControllerTest extends TestCase
 
     private function prepare_scenario($scenario)
     {
-      $directory = "./scenarios/$scenario/target";
       $workingDir = getcwd();
+      $directory = "$workingDir/scenarios/$scenario/target";
+      
       try
       {
         $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
-        $this->recurse_copy(realpath("./src/"),"./scenarios/$scenario/target");
-        $this->assertTrue(unlink(realpath("./scenarios/$scenario/target/config.php")),"Could not delete configuration file");
-        $sourceConfig = realpath("./tests/scenarios/$scenario/target/config.php");
-        $targetConfig = "./scenarios/$scenario/target/config.php";
-        $this->assertTrue(file_exists("./scenarios/$scenario/target/config.php"), "Configuration file does not exist");
+        $this->recurse_copy(realpath("$workingDir/src/"),"$workingDir/scenarios/$scenario/target");
+        $this->assertTrue(unlink(realpath("$workingDir/scenarios/$scenario/target/config.php")),"Could not delete configuration file");
+        $sourceConfig = realpath("$workingDir/tests/scenarios/$scenario/target/config.php");
+        $targetConfig = "$workingDir/scenarios/$scenario/target/config.php";
         $this->assertTrue(copy($sourceConfig,$targetConfig),"Failed to copy $sourceConfig to $targetConfig");
-        $this->recurse_copy(realpath("./tests/scenarios/$scenario/source"),"./scenarios/$scenario/source");
+        $this->assertTrue(file_exists("$workingDir/scenarios/$scenario/target/config.php"), "Configuration file does not exist");
+        $this->recurse_copy(realpath("$workingDir/tests/scenarios/$scenario/source"),"$workingDir/scenarios/$scenario/source");
       }
       catch(Exception $ex)
       {
