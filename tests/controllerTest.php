@@ -51,8 +51,8 @@ final class ControllerTest extends TestCase
       $page = $browser->newPage();
       $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/");
       $page->evaluate();
-      //$selector = $page->querySelector(".waiting");
-      //$this->assertNotNull($selector);
+      $selector = $page->querySelectorAll(".waiting");
+      $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
       $page->waitForSelector("#updateVersion");
     }
 
