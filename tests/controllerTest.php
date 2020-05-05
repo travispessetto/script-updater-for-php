@@ -73,7 +73,9 @@ final class ControllerTest extends TestCase
         $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
         $this->recurse_copy(realpath("./src/"),"./scenarios/$scenario/target");
         unlink(realpath("./scenarios/$scenario/target/config.php"));
-        copy(realpath("./tests/scenarios/$scenario/target/config.php"),"./scenarios/$scenario/target/config.php");
+        $sourceConfig = realpath("./tests/scenarios/$scenario/target/config.php");
+        $targetConfig = "./scenarios/$scenario/target/config.php";
+        $this->assertTrue(copy($sourceConfig,$targetConfig),"Failed to copy $sourceConfig to $targetConfig");
         $this->recurse_copy(realpath("./tests/scenarios/$scenario/source"),"./scenarios/$scenario/source");
       }
       catch(Exception $ex)
