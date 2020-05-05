@@ -26,7 +26,7 @@ class ConfigSingleton
         }
         else
         {
-          return null;
+          throw new new Exception("$name is not in the configuration array");
         }
       }
 
