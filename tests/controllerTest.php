@@ -52,7 +52,16 @@ final class ControllerTest extends TestCase
       $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/");
       $selector = $page->querySelectorAll(".waiting");
       $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
-      $page->waitForSelector("#updateVersion");
+      try
+      {
+        $selector = $page->waitForSelector("#updateVersion");
+        $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
+      }
+      catch(Nesk\Rialto\Exceptions\Node\FatalException $ex)
+      {
+        $this->assertTrue(false,"Timeout occured, contents of page were:".PHP_EOL.$page->content());
+      }
+
     }
 
     private function prepare_scenario($scenario)
