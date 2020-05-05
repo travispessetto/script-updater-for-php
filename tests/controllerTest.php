@@ -79,6 +79,7 @@ final class ControllerTest extends TestCase
         $this->assertTrue(copy($sourceConfig,$targetConfig),"Failed to copy $sourceConfig to $targetConfig");
         $this->assertTrue(file_exists("$workingDir/scenarios/$scenario/target/config.php"), "Configuration file does not exist");
         $this->recurse_copy(realpath("$workingDir/tests/scenarios/$scenario/source"),"$workingDir/scenarios/$scenario/source");
+        sleep(20);
       }
       catch(Exception $ex)
       {
