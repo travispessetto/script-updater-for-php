@@ -33,7 +33,7 @@ final class ControllerTest extends TestCase
     // Webdriver basics at https://github.com/php-webdriver/php-webdriver/blob/master/example.php
     public function testPuPHPeteer()
     {
-        $puppeteer = new Puppeteer;
+        $puppeteer = new Puppeteer(['read_timeout' => 300]); // seconds used here
         $browser = $puppeteer->launch();
         $page = $browser->newPage();
         $page->goto('http://localhost');
@@ -49,7 +49,7 @@ final class ControllerTest extends TestCase
       $puppeteer = new Puppeteer;
       $browser = $puppeteer->launch();
       $page = $browser->newPage();
-      $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/");
+      $page->goto("http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/",["timeout"=>300000]); //milliseconds used here
       $selector = $page->querySelectorAll(".waiting");
       $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
       try
