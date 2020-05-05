@@ -43,7 +43,7 @@ final class ControllerTest extends TestCase
         $this->assertTrue($passed,"Puppeteer failed.");
     }
 
-    public function testUpdateAvalibleDirNoExistScenario()
+    public function testUpdateAvalibleLocalDirNoExistScenario()
     {
       $this->prepare_scenario("UpdateAvalibleLocalDirNoExist");
       $puppeteer = new Puppeteer(['read_timeout' => 300]); // seconds used here
@@ -72,9 +72,10 @@ final class ControllerTest extends TestCase
       {
         $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
         $this->recurse_copy(realpath("./src/"),"./scenarios/$scenario/target");
-        unlink(realpath("./scenarios/$scenario/target/config.php"));
+        $this->assertTrue(unlink(realpath("./scenarios/$scenario/target/config.php")),"Could not delete configuration file");
         $sourceConfig = realpath("./tests/scenarios/$scenario/target/config.php");
         $targetConfig = "./scenarios/$scenario/target/config.php";
+        $this->assertTrue(file_exists("./scenarios/$scenario/target/config.php"), "Configuration file does not exist");
         $this->assertTrue(copy($sourceConfig,$targetConfig),"Failed to copy $sourceConfig to $targetConfig");
         $this->recurse_copy(realpath("./tests/scenarios/$scenario/source"),"./scenarios/$scenario/source");
       }

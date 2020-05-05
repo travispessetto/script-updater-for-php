@@ -31,3 +31,4 @@ before_install:
 script: 
   - ./vendor/bin/phpunit --verbose tests 
   - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/
+  - ls ./
