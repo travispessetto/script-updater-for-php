@@ -4,6 +4,7 @@ class ConfigSingleton
 {
       protected function __construct()
       {
+        $config[] = array();
         require_once(__DIR__."/config.php");
         $this->config = $config;
       }
