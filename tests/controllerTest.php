@@ -54,10 +54,10 @@ final class ControllerTest extends TestCase
       $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
       try
       {
-        $selector = $page->waitForSelector("#updateVersion");
+        $selector = $page->tryCatch->waitForSelector("#updateVersion");
         $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
       }
-      catch(Nesk\Rialto\Exceptions\Node\FatalException $ex)
+      catch(Nesk\Rialto\Exceptions\Node\Exception $ex)
       {
         $this->assertTrue(false,"Timeout occured, contents of page were:".PHP_EOL.$page->content());
       }
