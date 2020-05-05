@@ -32,3 +32,5 @@ script:
   - ./vendor/bin/phpunit --verbose tests 
   - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/
   - ls ./
+  - ls ./scenarios/UpdateAvalibleLocalDirNoExist/target/
+  - cat /scenarios/UpdateAvalibleLocalDirNoExist/target/config.php
