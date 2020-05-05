@@ -20,13 +20,17 @@ class ConfigSingleton
 
       public function __get($name)
       {
-        if(array_key_exists($name,$this->config))
+        if(!isset($this->config))
+        {
+          throw new Exception("Configuration array does not exist");
+        }
+        else if(array_key_exists($name,$this->config))
         {
           return $this->config[$name];
         }
         else
         {
-          throw new new Exception("$name is not in the configuration array");
+          throw new Exception("$name is not in the configuration array");
         }
       }
 
