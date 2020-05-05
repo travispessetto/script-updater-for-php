@@ -34,3 +34,4 @@ script:
   - ls ./
   - ls ./scenarios/UpdateAvalibleLocalDirNoExist/target/
   - cat ./scenarios/UpdateAvalibleLocalDirNoExist/target/config.php
+  - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/source/update.yml
