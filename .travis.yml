@@ -9,10 +9,11 @@ before_install:
   - curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
   - sudo apt-get install -y nodejs
   - sudo apt-get install composer
-  - composer update
   - sudo service apache2 restart
   - npm install lodash
   - npm install puppeteer
+  - npm install @nesk/rialto
+  - composer update
 
 script: 
   - ./vendor/bin/phpunit --verbose tests 
