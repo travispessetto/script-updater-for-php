@@ -11,6 +11,7 @@ before_install:
   - sudo apt-get install composer
   - composer update
   - sudo service apache2 restart
+  - npm install lodash
 
 script: 
   - ./vendor/bin/phpunit --verbose tests 
