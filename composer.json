@@ -6,7 +6,9 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8",
-        "nesk/rialto": "1.4.0",
-        "nesk/puphpeteer": "1.6.0"
+        "nesk/rialto": "1.4.0"
+    },
+    "require": {
+        "nesk/puphpeteer": "^1.6"
     }
 }

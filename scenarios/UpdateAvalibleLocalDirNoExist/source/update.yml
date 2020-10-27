@@ -1,0 +1,4 @@
+version:    1.0.0
+files:
+        add:
+            - {local: "dir/no/exist/foobar.txt", remote: "foobar.txt"}

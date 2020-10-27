@@ -4,35 +4,13 @@ php:
   - 7.4
 before_install:
   - sudo apt-get -y update
-  - sudo apt-get install curl
-  - sudo apt install unzip
-  - sudo apt install nodejs
-  - composer install
-  - npm install @nesk/rialto
-  - npm install @nesk/puphpeteer
-  - composer require nesk/puphpeteer
-  - composer dump-autoload
-  # Enable user namespace cloning
-  - "sysctl kernel.unprivileged_userns_clone=1"
-  # Launch XVFB
-  - "export DISPLAY=:99.0"
-  # - "sh -e /etc/init.d/xvfb start"
-  # Install apache and PHP
-  - wget http://mirrors.kernel.org/ubuntu/pool/multiverse/liba/libapache-mod-fastcgi/libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb
-  - sudo dpkg -i libapache2-mod-fastcgi_2.4.7~0910052141-1.2_amd64.deb; sudo apt install -f
-  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-  - sudo a2enmod rewrite actions fastcgi alias
-  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - sudo sed -i -e "s,www-data,travis,g" /etc/apache2/envvars
-  - sudo chown -R travis:travis /var/lib/apache2/fastcgi
-  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/000-default.conf
+  - sudo apt-get install -y apache2
+  - sudo apt-get install -y  php
+  - curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+  - sudo apt-get install -y nodejs
+  - sudo apt-get install composer
+  - composer update
   - sudo service apache2 restart
+
 script: 
   - ./vendor/bin/phpunit --verbose tests 
-  - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/target/
-  - ls ./
-  - ls ./scenarios/UpdateAvalibleLocalDirNoExist/target/
-  - cat ./scenarios/UpdateAvalibleLocalDirNoExist/target/config.php
-  - curl http://localhost/scenarios/UpdateAvalibleLocalDirNoExist/source/update.yml

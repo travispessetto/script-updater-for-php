@@ -71,6 +71,10 @@ final class ControllerTest extends TestCase
       
       try
       {
+        if(file_exists($directory))
+        {
+          $this->rrmdir($directory);
+        }
         $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
         $this->recurse_copy(realpath("$workingDir/src/"),"$workingDir/scenarios/$scenario/target");
         $this->assertTrue(unlink(realpath("$workingDir/scenarios/$scenario/target/config.php")),"Could not delete configuration file");
@@ -83,7 +87,7 @@ final class ControllerTest extends TestCase
       }
       catch(Exception $ex)
       {
-        $this->assertTrue(false,"Could not create folder $directory in $cwd.");
+        $this->assertTrue(false,"Could not create folder $directory as ".exec('whoami'));
       }
     }
 
