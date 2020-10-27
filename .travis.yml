@@ -12,6 +12,7 @@ before_install:
   - composer update
   - sudo service apache2 restart
   - npm install lodash
+  - npm install puppeteer
 
 script: 
   - ./vendor/bin/phpunit --verbose tests 
