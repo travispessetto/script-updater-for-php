@@ -14,6 +14,7 @@ before_install:
   - npm install puppeteer
   - npm install @nesk/rialto
   - composer update
+  - cp -a ./script-updater-for-php/. /var/www/html/
 
 script: 
   - ./vendor/bin/phpunit --verbose tests 
