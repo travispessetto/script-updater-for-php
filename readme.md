@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/travispessetto/script-updater-for-php.svg?branch=master)](https://travis-ci.org/travispessetto/script-updater-for-php)
 
-**Notice:** I am hoping to get version 4.0.0 out soon but I would like to make sure this release is well tested.  So, the current status is setting up Travis CI, PHPUnit, and Selenium.
+**Notice:** I am hoping to get version 4.0.0 out soon but I would like to make sure this release is well tested.  So, the current status is setting up CI, PHPUnit, and Puppeteer.  I am also considering migrating to CircleCI from Travis CI.
 
 Script Updater for PHP is an update script that can be used with any PHP project to update
 the files via a couple clicks.  The script only requires that it can get at a
