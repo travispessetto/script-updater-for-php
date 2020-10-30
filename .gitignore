@@ -1,5 +1,6 @@
 update-test/
 update-test-source/
+scenarios/
 .vscore/
 vendor/
 node_modules/
