@@ -31,7 +31,7 @@ final class ControllerTest extends TestCase
 
     // Test to make sure Selenium is up and running
     // Webdriver basics at https://github.com/php-webdriver/php-webdriver/blob/master/example.php
-    public function testPuPHPeteer()
+    /*public function testPuPHPeteer()
     {
         $puppeteer = new Puppeteer(['read_timeout' => 300]); // seconds used here
         $browser = $puppeteer->launch();
@@ -41,7 +41,7 @@ final class ControllerTest extends TestCase
         $browser->close();
         $passed = strpos($title,"updater") !== false;
         $this->assertTrue($passed,"Puppeteer failed.");
-    }
+    }*/
 
     public function testUpdateAvalibleLocalDirNoExistScenario()
     {
