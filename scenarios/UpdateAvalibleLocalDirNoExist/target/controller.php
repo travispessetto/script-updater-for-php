@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__."/configsingleton.php");
 require_once(__DIR__."/langs/language.php");
-require_once(__DIR__."/lib/spyc/spyc.php");
+require_once(__DIR__."/lib/spyc/Spyc.php");
 header("content-type: application/json");
 $action = $_GET["action"];
 $controller = new Controller();
