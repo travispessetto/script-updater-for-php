@@ -15,7 +15,7 @@ before_install:
   - npm install @nesk/rialto
   - composer update
   - sudo cp -a ./. /var/www/html/
-  - sudo chmod -R /var/www/
+  - sudo chmod 777 -R /var/www/
 
 script: 
   - ./vendor/bin/phpunit --verbose tests 
