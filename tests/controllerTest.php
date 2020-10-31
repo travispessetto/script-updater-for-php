@@ -29,20 +29,6 @@ final class ControllerTest extends TestCase
         $this->assertNotFalse($result,"PHP Internal server does not appear to be started");
     }
 
-    // Test to make sure Selenium is up and running
-    // Webdriver basics at https://github.com/php-webdriver/php-webdriver/blob/master/example.php
-    /*public function testPuPHPeteer()
-    {
-        $puppeteer = new Puppeteer(['read_timeout' => 300]); // seconds used here
-        $browser = $puppeteer->launch();
-        $page = $browser->newPage();
-        $page->goto('http://localhost');
-        $title = strtolower($page->title());
-        $browser->close();
-        $passed = strpos($title,"updater") !== false;
-        $this->assertTrue($passed,"Puppeteer failed.");
-    }*/
-
     public function testUpdateAvalibleLocalDirNoExistScenario()
     {
       $this->prepare_scenario("UpdateAvalibleLocalDirNoExist");
