@@ -50,6 +50,45 @@ final class ControllerTest extends TestCase
 
     }
 
+    public function testRestorePrevVersion()
+    {
+      $this->prepare_scenario("RestorePrevVersion");
+      $puppeteer = new Puppeteer(["read_timeout" => 300]);
+      $browser = $puppeteer->launch();
+      $page = $browser->newPage();
+      $page->goto("http://localhost/scenarios/RestorePrevVersion/target/",["timeout"=>300000]);
+      $selector = $page->querySelectorAll(".waiting");
+      $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
+      try
+      {
+        $javascriptSelector = "#updateVersion";
+        $selector = $page->tryCatch->waitForSelector($javascriptSelector);
+        $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
+        $page->click($javascriptSelector);
+        $javascriptSelector = "#updateFinished";
+        $selector = $page->tryCatch->waitForSelector($javascriptSelector);
+        $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
+        $page->reload();
+        $selector = $page->querySelectorAll(".waiting");
+        $this->assertNotNull($selector,"Content:".PHP_EOL.$page->content());
+        $javascriptSelector = "#restoreVersion";
+        $selector = $page->tryCatch->waitForSelector($javascriptSelector);
+        $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
+        $page->click($javascriptSelector);
+        $javascriptSelector = "#restoreBackup-0.0.0";
+        $selector = $page->tryCatch->waitForSelector($javascriptSelector);
+        $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
+        $page->click($javascriptSelector);
+        $javascriptSelector = "#updateFinished";
+        $selector = $page->tryCatch->waitForSelector($javascriptSelector);
+        $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
+      }
+      catch(Nesk\Rialto\Exceptions\Node\Exception $ex)
+      {
+        $this->assertTrue(false,"Timeout occured, contents of page were:".PHP_EOL.$page->content());
+      }
+    }
+
     private function prepare_scenario($scenario)
     {
       $workingDir = getcwd();

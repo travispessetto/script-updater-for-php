@@ -5,7 +5,8 @@ php:
 before_install:
   - sudo apt-get -y update
   - sudo apt-get install -y apache2
-  - sudo apt-get install -y  php
+  - sudo apt-get install -y php
+  - sudo apt-get install -y php-zip
   - curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
   - sudo apt-get install -y nodejs
   - sudo apt-get install composer

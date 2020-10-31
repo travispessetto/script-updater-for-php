@@ -63,7 +63,7 @@ var checkForBackups = function()
 		{
 			$("#info").append(sprintf('<div>{0}</div>',message['backups_found']));
 			$("#info").append(sprintf('<div>{0}</div>',message['prompt_update_backup']));
-			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{0}</a>&nbsp;<a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);">{1}</a></div>',message['prompt_update_btn'],message['prompt_restore_btn']));
+			$("#info").append(sprintf('<div><a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.CheckVersionFileExists);">{0}</a>&nbsp;<a href="#" class="primary" onclick="StepCounter.setStepAndExecute(Step.ChooseBackupFile);" id="restoreVersion">{1}</a></div>',message['prompt_update_btn'],message['prompt_restore_btn']));
 		}
 		else
 		{
@@ -198,7 +198,7 @@ var chooseBackupFile = function()
 		$("#info").append(sprintf('<div>{0}</div>',message['prompt_restore_version']));
 		for(var i = 0; i < data.versions.length; ++i)
 		{
-			$("#info").append(sprintf('<div><a class="primary" onclick="findAllNewerBackupsAndRestoreRequestedBackup(\''+data.versions[i]+'\');">{0}</a></div>',data.versions[i]));
+			$("#info").append(sprintf('<div><a class="primary" onclick="findAllNewerBackupsAndRestoreRequestedBackup(\''+data.versions[i]+'\');" id="restoreBackup-{0}">{0}</a></div>',data.versions[i]));
 		}
 
 	},failed);
@@ -355,7 +355,7 @@ var failed = function(xhr,status,error)
 
 var finished = function()
 {
-	$("#info").append(sprintf('<div>{0}</div>',message['update_finished']));
+	$("#info").append(sprintf('<div id="updateFinished">{0}</div>',message['update_finished']));
 }
 
 var installFiles = function()
