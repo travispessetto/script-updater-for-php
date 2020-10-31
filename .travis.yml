@@ -13,10 +13,12 @@ before_install:
   - npm install lodash
   - npm install puppeteer
   - npm install @nesk/rialto
-  - composer update
   - sudo cp -a ./. /var/www/html/
   - sudo chmod 777 -R /var/www/
+  - cd /var/www/html/
+  - composer update
 
 script: 
+  - cd /var/www/html/
   - ./vendor/bin/phpunit --verbose tests 
   - sudo cat /var/log/apache2/error.log
