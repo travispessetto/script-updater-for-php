@@ -17,7 +17,7 @@ require_once("./langs/language.php");
 <body>
 <div class="header">
   <h1><?php echo Language::Instance()->title; ?></h1>
-  <h6><a href="https://github.com/travispessetto/script-updater-for-php"><?php echo Language::Instance()->author; ?></a></h6>
+  <h6><a href="https://github.com/travispessetto/script-updater-for-php"><?php echo Language::Instance()->powered_by; ?></a></h6>
 </div>
 <div id="info">
   <div><?php echo Language::Instance()->welcome_message; ?> <span class="waiting"></span></div>

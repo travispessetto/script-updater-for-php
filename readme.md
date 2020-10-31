@@ -2,7 +2,8 @@
 
 [![Build Status](https://travis-ci.org/travispessetto/script-updater-for-php.svg?branch=master)](https://travis-ci.org/travispessetto/script-updater-for-php)
 
-**Notice:** I am hoping to get version 4.0.0 out soon but I would like to make sure this release is well tested.  So, the current status is setting up CI, PHPUnit, and Puppeteer.  I am also considering migrating to CircleCI from Travis CI.
+**Notice:** I am hoping to get version 4.0.0 out soon but I would like to make sure this release is well tested.  So, current status is adding more tests
+and getting some languages added.
 
 Script Updater for PHP is an update script that can be used with any PHP project to update
 the files via a couple clicks.  The script only requires that it can get at a
@@ -10,10 +11,7 @@ update file that contains the current version as well as the local filesystem
 location and the remote location.  So, potentially Amazon S3 could be used.
 
 Did we mention that this update script can adapt to languages?  All you need is
-the appropriate language files in js/langs and langs/php.  There are currently
-three languages supported out of the box, English, Spanish, and German.  The
-script will default to English if it cannot find a suitable language file based
-on the brower's settings.
+the appropriate language files in js/langs and langs/php. 
 
 ## Screen Shots
 
@@ -86,6 +84,16 @@ host that you want to serve as your base.
 If you would like to have each version have its own update script you can make
 sure you include the updaters config.php in the updates with the new location
 for that version.
+
+## Supported Languages
+
+The following languages are supported:
+
+| Language | Version |
+| --- | --- |
+| English | All |
+| German | 4.0 (next release) |
+| Spanish | All |
 
 ## Plugins
 
@@ -208,14 +216,6 @@ can see it and then point the browser to the repsoitory's URL with appended with
 In order to parse YAML we are using the [Spyc](https://github.com/mustangostang/spyc)
 library by Vladimir Andersen.  This is licensed under the [MIT License](https://github.com/mustangostang/spyc/blob/master/COPYING).
 
-## Development TODO
-
-The following still needs to be done before the next release happens:
-
-*  Fix all current issues
-*  Make backups have a restore-{version}.yml file that can be used to delete files that should not be there
-*  Make it so the yaml can have a restore scripts that will be added to restore-{version}.yml
-*  Restoration should restore all versions that are more current then the restore version and delete them after each restore
 
 ## License
 
