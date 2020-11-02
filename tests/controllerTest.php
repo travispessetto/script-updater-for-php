@@ -113,7 +113,7 @@ final class ControllerTest extends TestCase
       }
       catch(Exception $ex)
       {
-        $this->assertTrue(false,"Could not create folder $directory as ".exec('whoami')." because ".$ex->getMessage()." on line: ".$ex->getLine());
+        $this->assertTrue(false,"Could not create folder $directory or file $targetConfig from $sourceConfig as ".exec('whoami')." because ".$ex->getMessage()." on line: ".$ex->getLine());
       }
     }
 
