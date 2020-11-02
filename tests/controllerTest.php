@@ -130,7 +130,10 @@ final class ControllerTest extends TestCase
                 {
                   unlink("$dst/$file");
                 }
-                  copy($src . '/' . $file,$dst . '/' . $file);
+                  if(!empty(trim($file)))
+                  {
+                   copy($src . '/' . $file,$dst . '/' . $file);
+                  }
               }
           }
       }
