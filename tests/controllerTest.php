@@ -93,6 +93,12 @@ final class ControllerTest extends TestCase
     {
       $workingDir = getcwd();
       $directory = "$workingDir/scenarios/$scenario/target";
+      $sourceConfig = realpath("$workingDir/tests/scenarios/$scenario/target/config.php");
+      if($sourceConfig === false)
+      {
+        $this->assertTrue($sourceConfig,"$workingDir/tests/scenarios/$scenario/target/config.php does not exist");
+      }
+      $targetConfig = "$workingDir/scenarios/$scenario/target/config.php";
       
       try
       {
@@ -103,12 +109,6 @@ final class ControllerTest extends TestCase
         $this->assertTrue(mkdir($directory,0755,true),"Could not create folder $directory");
         $this->recurse_copy(realpath("$workingDir/src/"),"$workingDir/scenarios/$scenario/target");
         $this->assertTrue(unlink(realpath("$workingDir/scenarios/$scenario/target/config.php")),"Could not delete configuration file");
-        $sourceConfig = realpath("$workingDir/tests/scenarios/$scenario/target/config.php");
-        if($sourceConfig === false)
-        {
-          $this->assertTrue($sourceConfig,"$workingDir/tests/scenarios/$scenario/target/config.php does not exist");
-        }
-        $targetConfig = "$workingDir/scenarios/$scenario/target/config.php";
         $this->assertTrue(copy($sourceConfig,$targetConfig),"Failed to copy $sourceConfig to $targetConfig");
         $this->assertTrue(file_exists("$workingDir/scenarios/$scenario/target/config.php"), "Configuration file does not exist");
         $this->recurse_copy(realpath("$workingDir/tests/scenarios/$scenario/source"),"$workingDir/scenarios/$scenario/source");
