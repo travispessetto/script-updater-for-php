@@ -38,6 +38,12 @@ class Controller
   public function AddUndoScripts()
   {
     $zip = new ZipArchive();
+    if(!file_exists("version.txt"))
+    {
+      header("HTTP/1.0 404 ".Language::Instance()->file_not_found);
+      echo Language::Instance()->file_not_found;
+      exit();
+    }
     $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
     $filename = __DIR__."/backups/backup-$currentVersion.zip";
     try
@@ -93,6 +99,12 @@ class Controller
   {
     $undoYaml = "delete:".PHP_EOL;
     $zip = new ZipArchive();
+    if(!file_exists("version.txt"))
+    {
+      header("HTTP/1.0 404 ".Language::Instance()->file_not_found);
+      echo Language::Instance()->file_not_found;
+      exit();
+    }
     $currentVersion = explode(PHP_EOL,file_get_contents("version.txt"))[0];
     $filename = __DIR__."/backups/backup-$currentVersion.zip";
     if(!file_exists(__DIR__."/backups"))
@@ -596,7 +608,7 @@ class Controller
       if($contents === false)
       {
         header("HTTP/1.0 404 ".Language::Instance()->file_not_found);
-        echo "File not found";
+        echo Language::Instance()->file_not_found;
         exit();
       }
       else

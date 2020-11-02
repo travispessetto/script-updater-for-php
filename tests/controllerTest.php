@@ -79,7 +79,7 @@ final class ControllerTest extends TestCase
         $selector = $page->tryCatch->waitForSelector($javascriptSelector);
         $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
         $page->click($javascriptSelector);
-        $javascriptSelector = "#updateFinished";
+        $javascriptSelector = "#restorationFinished";
         $selector = $page->tryCatch->waitForSelector($javascriptSelector);
         $this->assertNotNull($selector,"Page contents are:".PHP_EOL.$page->content());
       }
@@ -108,11 +108,12 @@ final class ControllerTest extends TestCase
         $this->assertTrue(copy($sourceConfig,$targetConfig),"Failed to copy $sourceConfig to $targetConfig");
         $this->assertTrue(file_exists("$workingDir/scenarios/$scenario/target/config.php"), "Configuration file does not exist");
         $this->recurse_copy(realpath("$workingDir/tests/scenarios/$scenario/source"),"$workingDir/scenarios/$scenario/source");
+        $this->recurse_copy(realpath("$workingDir/tests/scenarios/$scenario/target"),$directory);
         sleep(20);
       }
       catch(Exception $ex)
       {
-        $this->assertTrue(false,"Could not create folder $directory as ".exec('whoami'));
+        $this->assertTrue(false,"Could not create folder $directory as ".exec('whoami')." because ".$ex->getMessage());
       }
     }
 

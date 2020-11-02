@@ -337,7 +337,7 @@ var restoreBackup = function(versionArr)
 	function(data)
 	{
 		clearWaiting();
-		$("#info").append(sprintf("<div>{0}</div>",sprintf(message['version_restoration_finished'],version)));
+		$("#info").append(sprintf("<div id=\"restorationFinished\">{0}</div>",sprintf(message['version_restoration_finished'],version)));
 		if(versionArr.length > 0)
 		{
 			restoreBackup(versionArr);
@@ -374,7 +374,7 @@ var sprintf = function()
 	 var message = arguments[0];
 	 for(var i = 1; i < arguments.length; ++i)
 	 {
-		 message = message.replace('{'+(i-1)+'}',arguments[i]);
+		 message = message.replaceAll('{'+(i-1)+'}',arguments[i]);
 	 }
 	 return message;
 }
