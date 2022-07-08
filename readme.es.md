@@ -9,6 +9,11 @@ usar Amazon S3 si uno quiere.
 ## Capturas de Pantalla
 
 ![01](screenshots/es/01.PNG)
+![02](screenshots/es/02.PNG)
+![03](screenshots/es/03.PNG)
+![04](screenshots/es/04.PNG)
+![05](screenshots/es/05.PNG)
+![06](screenshots/es/06.PNG)
 
 ## Configurar el Script de Actualización
 
