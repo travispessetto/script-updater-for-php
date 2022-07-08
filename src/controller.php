@@ -368,6 +368,20 @@ class Controller
 
    }
 
+   public function FinishButton()
+   {
+     $config = ConfigSingleton::Instance();
+     $updateYaml = SpyC::YAMLLoad($this->GetUpdateFile());
+     if(array_key_exists('finishUrl',$updateYaml))
+     {
+       echo json_encode(array('finishUrl'=>true,'url'=>$updateYaml['finishUrl']));
+     }
+     else
+     {
+       echo json_encode(array('finishUrl'=>false));
+     }
+   }
+
    public function InstallFiles()
    {
       $config = ConfigSingleton::Instance();

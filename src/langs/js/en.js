@@ -46,3 +46,6 @@ message['delete_aux_controller'] = "Deleting auxiliary controller";
 message['aux_controller_deleted'] = "Auxiliary controller deleted";
 message['aux_controller_delete_failed'] = "Could not delete auxiliary controller";
 message['find_newer_backups'] = "Finding newer backups";
+message['finish_button_waiting'] = "Attempting to find a finish button";
+message['finish_button_text'] = "Finished";
+message['finish_button_not_found'] = "A finish button was not found";

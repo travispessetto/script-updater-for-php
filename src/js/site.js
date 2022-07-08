@@ -356,6 +356,20 @@ var failed = function(xhr,status,error)
 var finished = function()
 {
 	$("#info").append(sprintf('<div id="updateFinished">{0}</div>',message['update_finished']));
+	$("#info").append(sprintf('<div>{0} <span class="waiting"></span></div>',sprintf(message['finish_button_waiting'])));
+	$.get(CONTROLLER,"action=FinishButton").then(function(data)
+	{
+		clearWaiting();
+		if(data.finishUrl)
+		{
+			$("#info").append(sprintf('<div><a href="{0}" class="primary">{1}</a></div>',data.url,message['finish_button_text']));
+		}
+		else
+		{
+			$("#info").append(sprintf('<div>{0}</div>',message['finish_button_not_found']));
+		}
+
+	},failed);
 }
 
 var installFiles = function()
