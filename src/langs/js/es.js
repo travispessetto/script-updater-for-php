@@ -48,3 +48,6 @@ message['delete_aux_controller'] = "Desechando el controlador auxiliar";
 message['aux_controller_deleted'] = "Se desechó el controlador auxiliar";
 message['aux_controller_delete_failed'] = "No se pudo desechar el controlador auxiliar";
 message['find_newer_backups'] = "Buscando copias de seguridad más nuevos";
+message['finish_button_waiting'] = "Intentando encontrar un botón de finalización";
+message['finish_button_text'] = "Terminado";
+message['finish_button_not_found'] = "No se ha encontrado un botón de finalización";
