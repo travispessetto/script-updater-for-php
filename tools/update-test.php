@@ -55,13 +55,13 @@ echo "Making update-test folder<br />";
 mkdir('../update-test');
 file_put_contents("../update-test/version.txt","0.0.0");
 echo "Copying in the updater files<br />";
-copy_directory('../css',"../update-test/css");
-copy_directory("../js","../update-test/js");
-copy_directory("../langs","../update-test/langs");
-copy_directory("../lib","../update-test/lib");
-copy("../configsingleton.php","../update-test/configsingleton.php");
-copy("../controller.php","../update-test/controller.php");
-copy("../index.php","../update-test/index.php");
+copy_directory('../src/css',"../update-test/css");
+copy_directory("../src/js","../update-test/js");
+copy_directory("../src/langs","../update-test/langs");
+copy_directory("../src/lib","../update-test/lib");
+copy("../src/configsingleton.php","../update-test/configsingleton.php");
+copy("../src/controller.php","../update-test/controller.php");
+copy("../src/index.php","../update-test/index.php");
 copy_directory("../plugins","../update-test/plugins");
 $configContents = <<<EOD
 <?php

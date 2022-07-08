@@ -202,8 +202,8 @@ a web browser.
 ### Update Test
 
 This script will generate two folders in the root of the repository, update-test and
-backup-test-source.  If you have a test webserver setup you can then test if the
-backup system works by visting backup-test.  This is good for testing updates
+update-test-source.  If you have a test webserver setup you can then test if the
+backup system works by visting update-test.  This is good for testing updates
 and restoring for backups.
 
 To run this script you will need to make sure the repository is somewhere the web browser
