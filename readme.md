@@ -1,6 +1,5 @@
 # Script Updater for PHP
 
-[![Build Status](https://travis-ci.org/travispessetto/script-updater-for-php.svg?branch=master)](https://travis-ci.org/travispessetto/script-updater-for-php)
 
 **Notice:** I am hoping to get version 4.0.0 out soon but I would like to make sure this release is well tested.  So, current status is adding more tests
 and getting some languages added.
