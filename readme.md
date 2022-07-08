@@ -1,3 +1,5 @@
+[Español](readme.es.md)
+
 # Script Updater for PHP
 
 Script Updater for PHP is an update script that can be used with any PHP project to update

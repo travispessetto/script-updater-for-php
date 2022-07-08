@@ -1,3 +1,5 @@
+[English](readme.md)
+
 # Actualizador de Scripts para PHP
 
 Actualizador de Scripts para PHP es un script de actualización que se puede usar con cualquier proyecto de PHP pata actualizar los archivos con un par de clics.
