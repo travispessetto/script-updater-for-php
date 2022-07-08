@@ -1,9 +1,5 @@
 # Script Updater for PHP
 
-
-**Notice:** I am hoping to get version 4.0.0 out soon but I would like to make sure this release is well tested.  So, current status is adding more tests
-and getting some languages added.
-
 Script Updater for PHP is an update script that can be used with any PHP project to update
 the files via a couple clicks.  The script only requires that it can get at a
 update file that contains the current version as well as the local filesystem
@@ -53,6 +49,11 @@ and `delete` sections.  These scripts will be added to the backup file and will 
 retrieved from `remote`.  The `delete` section specifies if it will be deleted after
 the backup is restored.
 
+If you want your users to be able to click a button when finished you can set
+`finishUrl` in the YAML file to a relative URL.  When the button is clicked
+they will go to whatever this is set to.  If this does not exist they will
+get a message that a finish button was not found.
+
 
 Below is an example of a YAML update file:
 
@@ -69,6 +70,7 @@ scripts:
             - {script: "scripts/writefile.php", delete: true}
         undo:
             - {script: "scripts/deletefile.php", remote: "scripts/deletefile.php", delete: true}
+finishUrl: "finished.html"
 ```
 
 ## Setup the Updater
@@ -91,8 +93,11 @@ The following languages are supported:
 | Language | Version |
 | --- | --- |
 | English | All |
-| German | 4.0 (next release) |
 | Spanish | All |
+
+
+If you would like a language here either contribute it and I will update this repository or
+request it and I will see if I can get someone to translate it into that language.
 
 ## Plugins
 
