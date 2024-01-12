@@ -189,7 +189,8 @@ class Controller
      $config = ConfigSingleton::Instance();
      $updateFolder = realPath($config->update_folder);
      $exists = false;
-     $files = glob("$updateFolder/backups/backup-*\.zip");
+	 $backupFolder = join(DIRECTORY_SEPARATOR,array($updateFolder,"backups","backup-*.zip"));
+     $files = glob($backupFolder);
      if(count($files) > 0)
      {
         $exists = true;
@@ -229,7 +230,8 @@ class Controller
      $currentDir = __DIR__;
      foreach($updateFiles as $file)
      {
-       if(strpos($currentDir,realpath($file['local'])) !== false)
+	   $localRealPath = realPath($file['local']);
+       if($localRealPath !== false && strpos($currentDir,(string)$localRealPath) !== false)
        {
             echo json_encode(array("update"=>true));
             exit();
@@ -237,7 +239,8 @@ class Controller
      }
      foreach($deleteFiles as $file)
      {
-        if(strpos($currentDir,realpath($file)) !== false)
+		$fileRealPath = realPath($file);
+        if($fileRealPath !== false && strpos($currentDir,(string)$fileRealPath) !== false)
         {
             echo json_encode(array("update"=>true));
             exit();
@@ -284,7 +287,8 @@ class Controller
     $config = ConfigSingleton::Instance();
     $updateFolder = realPath($config->update_folder);
     $exists = false;
-    $files = glob("$updateFolder/backups/backup-*\.zip");
+	$backupFolder = join(DIRECTORY_SEPARATOR,array($updateFolder,"backups","backup-*.zip"));
+    $files = glob($backupFolder);
     $versions = array();
     foreach($files as $file)
     {
@@ -294,7 +298,7 @@ class Controller
         array_push($versions,$matches[1]);
       }
     }
-    echo json_encode(array("versions"=>$versions));
+    echo json_encode(array("versions"=>$versions,'backupfolder'=>$backupFolder));
    }
 
    public function CreateAuxController()
@@ -322,6 +326,8 @@ class Controller
       $config = ConfigSingleton::Instance();
       $updateFolder = realPath($config->update_folder);
       $exists = true;
+	  $scriptsRan = array();
+	  $afterVersionUpdate = array_key_exists('afterVersionUpdate',$_GET) && filter_var($_GET['afterVersionUpdate'],FILTER_VALIDATE_BOOLEAN);
       if(!array_key_exists('scripts',$spyc) || !array_key_exists('do',$spyc['scripts']))
       {
         $exists = false;
@@ -330,8 +336,20 @@ class Controller
       {
         foreach($spyc['scripts']['do'] as $script)
         {
-          if(file_exists($updateFolder.'/'.$script['script']))
+		  $runNow = false;
+		  if($afterVersionUpdate && array_key_exists('afterVersionUpdate',$script) && $script['afterVersionUpdate'])
+		  {
+			  $runNow = true;
+		  }
+		  else if($afterVersionUpdate
+			  && (!array_key_exists('afterVersionUpdate',$script) || !$script['afterVersionUpdate']))
+		  {
+			  $runNow = true;
+		  }
+
+          if(file_exists($updateFolder.'/'.$script['script']) && $runNow)
           {
+			$scriptsRan[] = $script;
             include_once($updateFolder.'/'.$script['script']);
             if($script['delete'])
             {
@@ -340,7 +358,7 @@ class Controller
           }
         }
       }
-      echo json_encode(array());
+      echo json_encode(array('scriptsRan'=>$scriptsRan,'runAfterVersionUpdate'=>$_GET['afterVersionUpdate']));
    }
 
    public function FindAllNewerBackups()
@@ -348,7 +366,8 @@ class Controller
       $restoreVersion = $_GET['restoreVersion'];
       $config = ConfigSingleton::Instance();
       $updateFolder = realPath($config->update_folder);
-      $files = glob("$updateFolder/backups/backup-*\.zip");
+	  $path = join(DIRECTORY_SEPARATOR,array("$updateFolder","backups","backup-*.zip"));
+      $files = glob($path);
       $versions = array();
       foreach($files as $file)
       {
@@ -362,7 +381,7 @@ class Controller
           }
         }
       }
-      $versions []= "0.0.0";
+	  $versions[] = $restoreVersion;
       usort($versions,array($this,"VersionOrganizerComparator"));
       echo json_encode(array("restoreVersions"=>$versions));
 
@@ -433,7 +452,7 @@ class Controller
       $config = ConfigSingleton::Instance();
       $version = $_GET['version'];
       $restoreTo = realpath($config->update_folder).'/';
-      $zipFile = __DIR__."/backups/backup-$version.zip";
+      $zipFile = join(DIRECTORY_SEPARATOR,array(__DIR__,"backups","backup-$version.zip"));
       $zip = new ZipArchive;
       if(!file_exists($zipFile))
       {
@@ -463,6 +482,7 @@ class Controller
         }
         file_put_contents("version.txt",$version);
         echo json_encode(array('success'=>true));
+		$zip->close();
         unlink($zipFile);
         unlink($yamlFile);
       }
@@ -658,10 +678,14 @@ class Controller
     }
     for($i = 0; $i < count($versionSlices); ++$i)
     {
-       if($versionSlices[$i] > $currentVersionSlices[$i])
-       {
-         return true;
-       }
+       if((int)$versionSlices[$i] > (int)$currentVersionSlices[$i])
+	   {
+		 return true;
+	   }
+	   else if ((int)$versionSlices[$i] < (int)$currentVersionSlices[$i])
+	   {
+		 return false;
+	   }
     }
     return false;
    }

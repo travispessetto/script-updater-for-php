@@ -246,10 +246,10 @@ var deleteAuxController = function()
 	},failed);
 }
 
-var executeScripts = function()
+var executeScripts = function(afterVersionUpdate = false)
 {
 	$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['running_scripts']));
-	$.get(CONTROLLER,"action=ExecuteScripts").then(function(data)
+	$.get(CONTROLLER,"action=ExecuteScripts&afterVersionUpdate="+afterVersionUpdate).then(function(data)
 	{
 
 		$("#info").append(sprintf('<div>{0} <span class="waiting"></span>',message['scripts_finished']));
@@ -310,6 +310,9 @@ var executeSteps = function(step)
 			break;
 		case Step.Finished:
 			finished();
+			break;
+		case Step.ExecuteScriptsAfterVersionUpdate:
+			executeScripts(true);
 			break;
 		default:
 		  stepNotFound(step);
@@ -412,7 +415,8 @@ var Step = {
 	ExecuteScripts: 15,
 	DeleteAuxController: 16,
 	UpdateVersion: 17,
-	Finished: 18
+	ExecuteScriptsAfterVersionUpdate: 18,
+	Finished: 19
 }
 
 var StepCounter = {

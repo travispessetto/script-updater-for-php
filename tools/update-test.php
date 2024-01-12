@@ -29,9 +29,10 @@ files:
             - "test3.txt"
 scripts:
     do:
-        - {script: "update-source-version.php", delete: true}
+        - {script: "update-source-version.php", delete: true, afterVersionUpdate: true}
     undo:
         - {script: "test-undo.php", remote: "undo/test-undo.txt", delete: true}
+finishUrl: "./"
 EOD;
 echo "Making update script<br />";
 $phpUpdateScript = <<<EOD
@@ -40,7 +41,7 @@ $phpUpdateScript = <<<EOD
     error_log("Content: \$content");
     \$version = preg_match("/1\\.0\\.(\\d+)/m",\$content,\$matches);
     \$incValue = \$matches[1] + 1;
-    \$content = str_replace("1.0.\$matches[1]","\$incValue.0.\$incValue",\$content);
+    \$content = str_replace("1.0.\$matches[1]","1.0.\$incValue",\$content);
     error_log("New content: \$content");
     file_put_contents('../update-test-source/update.yml',\$content);
 EOD;
