@@ -1,5 +1,6 @@
 <?php
 
+echo "Creating update test!<br />";
 if(file_exists("../update-test-source") && is_dir("../update-test-source"))
 {
     rrmdir("../update-test-source");
@@ -34,7 +35,9 @@ scripts:
         - {script: "test-undo.php", remote: "undo/test-undo.txt", delete: true}
 finishUrl: "./"
 EOD;
+
 echo "Making update script<br />";
+
 $phpUpdateScript = <<<EOD
 <?php
     \$content = file_get_contents(__DIR__.'/../update-test-source/update.yml');
@@ -45,21 +48,27 @@ $phpUpdateScript = <<<EOD
     error_log("New content: \$content");
     file_put_contents('../update-test-source/update.yml',\$content);
 EOD;
+
 $testUndo = <<<EOD
 <?php
     file_put_contents("undo-test.txt","This file should exist on an undo");
 EOD;
+
 file_put_contents("../update-test-source/undo/test-undo.txt",$testUndo);
 file_put_contents("../update-test-source/update-source-version.txt",$phpUpdateScript);
 file_put_contents('../update-test-source/update.yml',$yamlContents); 
+
 echo "Making update-test folder<br />";
 mkdir('../update-test');
 file_put_contents("../update-test/version.txt","0.0.0");
+
 echo "Copying in the updater files<br />";
+
 copy_directory('../src/css',"../update-test/css");
 copy_directory("../src/js","../update-test/js");
 copy_directory("../src/langs","../update-test/langs");
 copy_directory("../src/lib","../update-test/lib");
+
 copy("../src/configsingleton.php","../update-test/configsingleton.php");
 copy("../src/controller.php","../update-test/controller.php");
 copy("../src/index.php","../update-test/index.php");
@@ -80,8 +89,10 @@ $linkUrl .= "/update-test-source";
 
 $configContents = str_replace("{url}",$linkUrl,$configContents);
 
+echo "Creating config file <br />";
 file_put_contents("../update-test/config.php",$configContents);
 
+echo "Creating text files <br />";
 file_put_contents('../update-test/test1.txt',"If this is unchanged it's bad");
 file_put_contents('../update-test/test2.txt',"Nobody changed me ");
 file_put_contents('../update-test/test3.txt',"I should be deleted");
