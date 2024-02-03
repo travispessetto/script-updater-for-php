@@ -16,10 +16,10 @@ class Controller
       foreach($plugins as $plugin)
       {
         $plugin = "./plugins/$plugin";
-        if(!is_dir($plugin))
+		$klass = ucfirst(pathinfo($plugin,PATHINFO_FILENAME));
+        if(!is_dir($plugin) && !empty($klass))
         {
           require_once($plugin);
-          $klass = ucfirst(pathinfo($plugin,PATHINFO_FILENAME));
           $instance = new $klass();
           if(method_exists($instance,"ConstructorHook"))
           {
