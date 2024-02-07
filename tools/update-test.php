@@ -71,6 +71,7 @@ copy_directory("../src/lib","../update-test/lib");
 
 copy("../src/configsingleton.php","../update-test/configsingleton.php");
 copy("../src/controller.php","../update-test/controller.php");
+copy('../src/updateController.php','../update-test/updateController.php');
 copy("../src/index.php","../update-test/index.php");
 copy_directory("../plugins","../update-test/plugins");
 $configContents = <<<EOD
