@@ -350,20 +350,27 @@ var restoreBackup = function(versionArr)
 
 var failed = function(xhr,status,error)
 {
-	clearWaiting();
 	$("#info").append(sprintf('<div class="error"><b>{0}</b></div>',message['update_failed']));
-	$("#info").append(sprintf('<div class="error"><b>Status:</b> {0}</div>',status));
-	$("#info").append(sprintf('<div class="error"><b>Error:</b>  {0}</div>',error));
-
-	try{
-		var errorData = JSON.parse(xhr.responseText);
-		$("#info").append(sprintf('<div class="error"><b>Message:</b>  {0}</div>',errorData.message));
-		$("#info").append(sprintf('<div class="error"><b>Line:</b>  {0}</div>',errorData.line));
-		$("#info").append(sprintf('<div class="error"><b>File:</b>  {0}</div>',errorData.file));
-	}
-	catch(e)
+	clearWaiting();
+	if(status === 'parsererror')
 	{
-		$("#info").append(printf('<div class="error"><b>Could not parse JSON:</b>  {0}</div>',e.message));
+		$("#info").append(xhr.responseText);
+	}
+	else
+	{
+		$("#info").append(sprintf('<div class="error"><b>Status:</b> {0}</div>',status));
+		$("#info").append(sprintf('<div class="error"><b>Error:</b>  {0}</div>',error));
+
+		try{
+			var errorData = JSON.parse(xhr.responseText);
+			$("#info").append(sprintf('<div class="error"><b>Message:</b>  {0}</div>',errorData.message));
+			$("#info").append(sprintf('<div class="error"><b>Line:</b>  {0}</div>',errorData.line));
+			$("#info").append(sprintf('<div class="error"><b>File:</b>  {0}</div>',errorData.file));
+		}
+		catch(e)
+		{
+			$("#info").append(printf('<div class="error"><b>Could not parse JSON:</b>  {0}</div>',e.message));
+		}
 	}
 }
 
